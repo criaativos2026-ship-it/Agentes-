@@ -1,0 +1,55 @@
+/* =====================================================================
+   DESIGN TOKENS — NEXUS AI  (fonte única da identidade visual)
+   Origem: direção visual do briefing (fundo azul-marinho/grafite, detalhes em
+   laranja e azul elétrico). Nome e marca ainda são PROVISÓRIOS — quando a marca
+   definitiva existir, edite SOMENTE este arquivo.
+   Contraste conferido (WCAG AA) para texto sobre --nx-bg e --nx-surface.
+   ===================================================================== */
+
+:root {
+  /* ---------- Superfícies (tema escuro padrão) ---------- */
+  --nx-bg:            #0A0F1C; /* azul-marinho profundo — fundo da aplicação */
+  --nx-bg-alt:        #0D1424; /* faixas e áreas secundárias */
+  --nx-surface:       #111A2C; /* cartões */
+  --nx-surface-2:     #16213A; /* cartões elevados, menus, hover */
+  --nx-border:        #1F2A44; /* bordas discretas */
+  --nx-border-strong: #2B3A5C;
+
+  /* ---------- Texto ---------- */
+  --nx-ink:           #E7ECF5; /* texto principal (15.6:1 sobre --nx-bg) */
+  --nx-ink-muted:     #9AA8C2; /* texto secundário (7.9:1) */
+  --nx-ink-subtle:    #6B7A96; /* rótulos e dicas (4.6:1) */
+
+  /* ---------- Marca ---------- */
+  --nx-brand:         #FF7A1A; /* laranja — ação principal */
+  --nx-brand-hover:   #FF8E3C;
+  --nx-on-brand:      #0A0F1C; /* texto sobre laranja (7.6:1) */
+  --nx-electric:      #3D8BFF; /* azul elétrico — destaques, links, foco */
+  --nx-electric-soft: #3D8BFF26;
+
+  /* ---------- Estados ---------- */
+  --nx-success:       #2BD47D;
+  --nx-warning:       #F5B341;
+  --nx-danger:        #FF5C5C;
+  --nx-info:          var(--nx-electric);
+
+  /* ---------- Tipografia (Inter — padrão aprovado) ---------- */
+  --nx-font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --nx-font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  --nx-tracking-display: -0.02em;
+  --nx-tracking-eyebrow: 0.14em;
+
+  /* ---------- Forma ---------- */
+  --nx-radius: 0.75rem; /* 12px: cartões e campos */
+
+  /* ---------- Gráficos ----------
+     Série categórica em ordem fixa (nunca ciclar). Validada com a skill dataviz
+     (validate_palette.js, modo escuro, superfície #111A2C): faixa de luminosidade,
+     croma, separação para daltonismo (ΔE ≥ 8), visão normal e contraste ≥ 3:1 — todos PASS. */
+  --nx-chart-1: #3D8BFF; /* azul elétrico */
+  --nx-chart-2: #E0681A; /* laranja (passo escuro da marca) */
+  --nx-chart-3: #1FA864; /* verde */
+  --nx-chart-4: #9B6BF0; /* violeta */
+  --nx-chart-critical: #F0524F; /* status crítico (erro) — reservado, sempre com rótulo */
+  --nx-chart-grid: #1F2A44;
+}

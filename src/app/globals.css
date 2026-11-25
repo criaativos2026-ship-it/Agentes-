@@ -1,0 +1,104 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "../../design/tokens.css";
+
+/* Variáveis do shadcn apontando para os tokens do NEXUS (nenhuma cor nova aqui). */
+:root {
+  color-scheme: dark;
+  --radius: var(--nx-radius);
+  --background: var(--nx-bg);
+  --foreground: var(--nx-ink);
+  --card: var(--nx-surface);
+  --card-foreground: var(--nx-ink);
+  --popover: var(--nx-surface-2);
+  --popover-foreground: var(--nx-ink);
+  --primary: var(--nx-brand);
+  --primary-foreground: var(--nx-on-brand);
+  --secondary: var(--nx-surface-2);
+  --secondary-foreground: var(--nx-ink);
+  --muted: var(--nx-bg-alt);
+  --muted-foreground: var(--nx-ink-muted);
+  --accent: var(--nx-surface-2);
+  --accent-foreground: var(--nx-ink);
+  --destructive: var(--nx-danger);
+  --border: var(--nx-border);
+  --input: var(--nx-border-strong);
+  --ring: var(--nx-electric);
+}
+
+@theme inline {
+  --font-sans: var(--font-inter), var(--nx-font-sans);
+  --font-mono: var(--nx-font-mono);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-bg: var(--nx-bg);
+  --color-bg-alt: var(--nx-bg-alt);
+  --color-surface: var(--nx-surface);
+  --color-surface-2: var(--nx-surface-2);
+  --color-line: var(--nx-border);
+  --color-line-strong: var(--nx-border-strong);
+  --color-ink: var(--nx-ink);
+  --color-ink-muted: var(--nx-ink-muted);
+  --color-ink-subtle: var(--nx-ink-subtle);
+  --color-brand: var(--nx-brand);
+  --color-brand-hover: var(--nx-brand-hover);
+  --color-electric: var(--nx-electric);
+  --color-success: var(--nx-success);
+  --color-warning: var(--nx-warning);
+  --color-danger: var(--nx-danger);
+  --color-chart-1: var(--nx-chart-1);
+  --color-chart-2: var(--nx-chart-2);
+  --color-chart-3: var(--nx-chart-3);
+  --color-chart-4: var(--nx-chart-4);
+  --color-chart-critical: var(--nx-chart-critical);
+
+  --radius-sm: calc(var(--radius) * 0.5);
+  --radius-md: calc(var(--radius) * 0.75);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.33);
+  --radius-2xl: calc(var(--radius) * 1.66);
+
+  --tracking-display: var(--nx-tracking-display);
+  --tracking-eyebrow: var(--nx-tracking-eyebrow);
+}
+
+@layer base {
+  * { @apply border-border; }
+  html { -webkit-tap-highlight-color: transparent; }
+  body {
+    @apply bg-background text-foreground antialiased;
+    background-image:
+      radial-gradient(1200px 600px at 100% -10%, color-mix(in oklab, var(--nx-electric) 10%, transparent), transparent 60%),
+      radial-gradient(900px 500px at -10% 110%, color-mix(in oklab, var(--nx-brand) 7%, transparent), transparent 60%);
+    background-attachment: fixed;
+  }
+  :focus-visible { outline: 2px solid var(--nx-electric); outline-offset: 2px; }
+  ::selection { background: var(--nx-electric-soft); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+@media print {
+  body { background: #fff !important; color: #000 !important; }
+  .no-print { display: none !important; }
+}
