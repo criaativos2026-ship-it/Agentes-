@@ -11,6 +11,7 @@ import { cancelExecution, decideApproval, sendChatMessage } from "@/server/execu
 import { drainQueue } from "@/server/execution/worker";
 import { canUseAgent } from "@/server/services/agent-access";
 import { toErrorState, UserFacingError } from "@/server/actions/result";
+import { hitRateLimit } from "@/server/auth/rate-limit";
 import { AccessDeniedError } from "@/server/errors";
 import { uuidSchema } from "@/lib/validation";
 import type { FormState } from "@/lib/form-state";
@@ -26,6 +27,8 @@ export async function sendAgentMessageAction(input: { slug: string; agentId: str
     z.string().uuid().parse(input.clientRequestId);
     const text = z.string().trim().min(1, "Escreva uma mensagem.").max(20000, "Mensagem muito longa.").parse(input.text);
     if (ctx.org.status === "suspended") throw new UserFacingError("Empresa suspensa: os agentes não executam tarefas.");
+    const lim = await hitRateLimit(`chat:${ctx.user.id}`, 30, 60);
+    if (!lim.allowed) throw new UserFacingError("Muitas mensagens em pouco tempo. Aguarde um minuto.");
     const res = await withOrg(ctx.org.id, ctx.user.id, async (tx) => {
       if (!(await canUseAgent(tx, ctx, input.agentId))) throw new AccessDeniedError("Você não tem acesso a este agente.");
       const [a] = await tx.select().from(agents).where(eq(agents.id, input.agentId));

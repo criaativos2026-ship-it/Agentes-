@@ -21,6 +21,7 @@ import { sendChatMessage } from "@/server/execution/control";
 import { drainQueue } from "@/server/execution/worker";
 import { checkAgentSlot } from "@/server/billing/limits";
 import { audit } from "@/server/audit/log";
+import { hitRateLimit } from "@/server/auth/rate-limit";
 import { PROVIDERS } from "@/server/ai/models";
 import { parseForm, toErrorState, UserFacingError } from "@/server/actions/result";
 import { optionalText, uuidSchema } from "@/lib/validation";
@@ -243,6 +244,8 @@ export async function sendTestMessageAction(input: { agentId: string; conversati
     const user = await requirePlatformUser();
     const text = z.string().trim().min(1, "Escreva uma mensagem.").max(20000).parse(input.text);
     const orgId = await agentOrg(user.id, input.agentId);
+    const lim = await hitRateLimit(`chat-test:${user.id}`, 30, 60);
+    if (!lim.allowed) throw new UserFacingError("Muitas mensagens em pouco tempo. Aguarde um minuto.");
     const res = await withOrg(orgId, user.id, async (tx) => {
       const draft = await ensureEditableDraft(tx, user.id, input.agentId);
       return sendChatMessage(tx, { orgId, userId: user.id, agentId: input.agentId, version: draft, conversationId: input.conversationId, text, isTest: true, clientRequestId: input.clientRequestId });

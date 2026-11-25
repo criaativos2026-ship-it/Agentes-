@@ -1,0 +1,11 @@
+# Publicação na Netlify (o adaptador de Next.js é aplicado automaticamente).
+# As migrações NÃO rodam no build: aplique com `npm run db:migrate` (DATABASE_MIGRATION_URL) antes de publicar.
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+[functions]
+  node_bundler = "esbuild"

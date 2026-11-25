@@ -102,7 +102,7 @@ const server = await startServer();
 const browser = await chromium.launch();
 
 try {
-  const suites = ["./suite-foundation.mjs", "./suite-agents.mjs"];
+  const suites = ["./suite-foundation.mjs", "./suite-agents.mjs", "./suite-business.mjs"];
   for (const s of suites) {
     try {
       const mod = await import(s);
