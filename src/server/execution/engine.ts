@@ -90,6 +90,11 @@ async function conversationHistory(tx: Tx, exec: Execution, limit = 20) {
 }
 
 export async function processExecution(exec: Execution, workerId: string): Promise<void> {
+  if (exec.kind === "workflow") {
+    const { processWorkflowExecution } = await import("@/server/workflows/runner");
+    await processWorkflowExecution(exec);
+    return;
+  }
   const state: LoopState = { timeoutSeconds: 300, ...(exec.state as LoopState | null) };
   let ctx: Loaded;
   try {
@@ -369,6 +374,13 @@ async function finishSucceeded(exec: Execution, orgId: string, text: string, tru
       await tx.insert(usageRecords).values({ organizationId: orgId, agentId: exec.agentId, executionId: exec.id, kind: "execution", quantity: 1, period: periodOf(new Date(), org.tz) });
     }
   });
+  await resumeParent(exec);
+}
+
+async function resumeParent(exec: Execution) {
+  if (!exec.workflowRunId) return;
+  const { resumeParentWorkflow } = await import("@/server/workflows/runner");
+  await resumeParentWorkflow(exec);
 }
 
 async function finishFailed(exec: Execution, error: string, state?: LoopState) {
@@ -380,10 +392,12 @@ async function finishFailed(exec: Execution, error: string, state?: LoopState) {
     await saveAssistantMessage(tx, exec, exec.organizationId, `⚠️ Não consegui concluir: ${error}`);
     await audit(tx, { organizationId: exec.organizationId, action: "execution.failed", summary: `Execução falhou: ${error.slice(0, 160)}`, entityType: "execution", entityId: exec.id });
   });
+  await resumeParent(exec);
 }
 
 async function finishCanceled(exec: Execution, orgId: string) {
   await withOrg(orgId, exec.triggeredBy, (tx) =>
     tx.update(executions).set({ status: "canceled", finishedAt: new Date(), lockedAt: null, lockedBy: null, error: "Cancelada pelo usuário." }).where(eq(executions.id, exec.id)),
   );
+  await resumeParent(exec);
 }

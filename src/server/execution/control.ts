@@ -55,7 +55,7 @@ export async function sendChatMessage(
   if (conversationId) {
     const [c] = await tx.select().from(conversations).where(and(eq(conversations.id, conversationId), eq(conversations.agentId, agent.id), eq(conversations.userId, input.userId)));
     if (!c) throw new UserFacingError("Conversa não encontrada.");
-    const busy = await tx.select({ id: executions.id }).from(executions).where(and(eq(executions.conversationId, conversationId), inArray(executions.status, ["queued", "running", "waiting_approval"]))).limit(1);
+    const busy = await tx.select({ id: executions.id }).from(executions).where(and(eq(executions.conversationId, conversationId), inArray(executions.status, ["queued", "running", "waiting_approval", "waiting"]))).limit(1);
     if (busy.length) throw new UserFacingError("Aguarde o agente terminar a resposta anterior.");
   } else {
     const [c] = await tx

@@ -6,6 +6,7 @@ import { processExecution } from "./engine";
 import { purgeOldRateLimits } from "@/server/auth/rate-limit";
 import { runBillingCycle } from "@/server/billing/service";
 import { purgeExpiredData } from "@/server/services/retention";
+import { runScheduledWorkflows } from "@/server/workflows/service";
 
 export const workerId = () => `${hostname()}-${process.pid}-${randomBytes(3).toString("hex")}`;
 
@@ -30,6 +31,7 @@ let lastDaily = 0;
 export async function maintenance() {
   const stale = await recoverStale();
   await purgeOldRateLimits();
+  await runScheduledWorkflows().catch((e) => console.error("[automações agendadas]", e));
   if (Date.now() - lastDaily > 60 * 60 * 1000) {
     lastDaily = Date.now();
     const billing = await runBillingCycle().catch((e) => (console.error("[cobrança]", e), null));

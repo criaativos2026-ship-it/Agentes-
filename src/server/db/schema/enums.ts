@@ -18,6 +18,7 @@ export const executionStatus = pgEnum("execution_status", [
   "queued",
   "running",
   "waiting_approval",
+  "waiting",
   "succeeded",
   "failed",
   "canceled",

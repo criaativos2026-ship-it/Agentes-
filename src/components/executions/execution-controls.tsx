@@ -31,7 +31,7 @@ export function ApprovalButtons({ slug, approvalId, summary }: { slug: string; a
 
 export function ExecutionControls({ slug, executionId, status, canCancel, canDecide, approvals }: { slug: string; executionId: string; status: string; canCancel: boolean; canDecide: boolean; approvals: { id: string; summary: string }[] }) {
   const router = useRouter();
-  const active = ["queued", "running", "waiting_approval"].includes(status);
+  const active = ["queued", "running", "waiting_approval", "waiting"].includes(status);
   return (
     <div className="flex flex-col items-end gap-2">
       {canDecide && approvals.map((a) => (

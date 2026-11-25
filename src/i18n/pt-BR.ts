@@ -14,6 +14,7 @@ export const ptBR = {
   "execution.status.queued": "Na fila",
   "execution.status.running": "Executando",
   "execution.status.waiting_approval": "Aguardando aprovação",
+  "execution.status.waiting": "Aguardando etapa",
   "execution.status.succeeded": "Concluída",
   "execution.status.failed": "Com erro",
   "execution.status.canceled": "Cancelada",

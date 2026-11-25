@@ -31,7 +31,7 @@ export type ExecutionFilter = { orgId?: string; status?: string; agentId?: strin
 export async function listExecutions(scope: { platformUserId: string } | { orgId: string; userId: string }, f: ExecutionFilter, page = 1, pageSize = 30) {
   const where: (SQL | undefined)[] = [
     f.orgId ? eq(executions.organizationId, f.orgId) : undefined,
-    f.status ? (f.status === "active" ? inArray(executions.status, ["queued", "running", "waiting_approval"]) : f.status === "error" ? inArray(executions.status, ["failed", "timed_out"]) : eq(executions.status, f.status as "queued")) : undefined,
+    f.status ? (f.status === "active" ? inArray(executions.status, ["queued", "running", "waiting_approval", "waiting"]) : f.status === "error" ? inArray(executions.status, ["failed", "timed_out"]) : eq(executions.status, f.status as "queued")) : undefined,
     f.agentId ? eq(executions.agentId, f.agentId) : undefined,
     f.onlyUserId ? eq(executions.triggeredBy, f.onlyUserId) : undefined,
     f.includeTests ? undefined : eq(executions.isTest, false),
