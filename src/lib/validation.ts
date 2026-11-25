@@ -1,5 +1,8 @@
 import { z } from "zod";
 
+// Mensagens de validação padrão em português.
+z.config(z.locales.ptBR ? z.locales.ptBR() : z.locales.pt());
+
 export const emailSchema = z
   .string({ error: "Informe o e-mail." })
   .trim()

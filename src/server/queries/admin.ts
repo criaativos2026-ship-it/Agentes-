@@ -1,7 +1,7 @@
 import "server-only";
-import { and, count, desc, eq, gte, inArray, sql, sum } from "drizzle-orm";
+import { and, count, desc, eq, gte, inArray, isNull, or, sql, sum } from "drizzle-orm";
 import { withPlatform } from "@/server/db/client";
-import { agents, auditLogs, executions, organizations, plans, subscriptions, usageRecords, users } from "@/server/db/schema";
+import { agents, auditLogs, executions, organizationMembers, organizations, plans, roles, subscriptions, usageRecords, users } from "@/server/db/schema";
 import { periodOf } from "@/lib/format";
 
 /** Indicadores do painel do super administrador — todos calculados no banco (sem números inventados). */
@@ -77,5 +77,125 @@ export async function getAdminDashboard(userId: string) {
       recent,
       daily: [...daily].map((d) => ({ day: d.day, total: Number(d.total), failed: Number(d.failed) })),
     };
+  });
+}
+
+export async function listOrganizations(userId: string, q?: string) {
+  return withPlatform(userId, (tx) =>
+    tx
+      .select({
+        id: organizations.id,
+        name: organizations.name,
+        slug: organizations.slug,
+        segment: organizations.segment,
+        status: organizations.status,
+        isDemo: organizations.isDemo,
+        createdAt: organizations.createdAt,
+        members: sql<number>`(select count(*)::int from organization_members m where m.organization_id = ${organizations.id} and m.status = 'active')`,
+        agents: sql<number>`(select count(*)::int from agents a where a.organization_id = ${organizations.id})`,
+        published: sql<number>`(select count(*)::int from agents a where a.organization_id = ${organizations.id} and a.status = 'published')`,
+        subscription: sql<string | null>`(select s.status::text from subscriptions s where s.organization_id = ${organizations.id} and s.status <> 'canceled' limit 1)`,
+      })
+      .from(organizations)
+      .where(q ? sql`${organizations.name} ilike ${"%" + q.replace(/[%_]/g, "") + "%"} or ${organizations.segment} ilike ${"%" + q.replace(/[%_]/g, "") + "%"}` : undefined)
+      .orderBy(desc(organizations.createdAt)),
+  );
+}
+
+export async function getOrganizationDetail(userId: string, orgId: string) {
+  return withPlatform(userId, async (tx) => {
+    const [org] = await tx.select().from(organizations).where(eq(organizations.id, orgId)).limit(1);
+    if (!org) return null;
+    const members = await tx
+      .select({
+        id: organizationMembers.id,
+        userId: users.id,
+        name: users.name,
+        email: users.email,
+        status: organizationMembers.status,
+        userStatus: users.status,
+        roleId: organizationMembers.roleId,
+        roleName: roles.name,
+        jobTitle: organizationMembers.jobTitle,
+        lastLoginAt: users.lastLoginAt,
+      })
+      .from(organizationMembers)
+      .innerJoin(users, eq(users.id, organizationMembers.userId))
+      .innerJoin(roles, eq(roles.id, organizationMembers.roleId))
+      .where(eq(organizationMembers.organizationId, orgId))
+      .orderBy(users.name);
+    const roleOptions = await tx
+      .select({ id: roles.id, name: roles.name, isSystem: roles.isSystem })
+      .from(roles)
+      .where(or(isNull(roles.organizationId), eq(roles.organizationId, orgId)))
+      .orderBy(desc(roles.isSystem), roles.name);
+    const orgAgents = await tx
+      .select({ id: agents.id, name: agents.name, status: agents.status, category: agents.category, updatedAt: agents.updatedAt })
+      .from(agents)
+      .where(eq(agents.organizationId, orgId))
+      .orderBy(agents.name);
+    const activity = await tx
+      .select({ id: auditLogs.id, summary: auditLogs.summary, createdAt: auditLogs.createdAt, actor: users.name })
+      .from(auditLogs)
+      .leftJoin(users, eq(users.id, auditLogs.actorUserId))
+      .where(eq(auditLogs.organizationId, orgId))
+      .orderBy(desc(auditLogs.createdAt))
+      .limit(20);
+    return { org, members, roleOptions, agents: orgAgents, activity };
+  });
+}
+
+export async function listUsers(userId: string, q?: string) {
+  const term = q ? `%${q.replace(/[%_]/g, "")}%` : null;
+  return withPlatform(userId, (tx) =>
+    tx
+      .select({
+        id: users.id,
+        name: users.name,
+        email: users.email,
+        platformRole: users.platformRole,
+        status: users.status,
+        lastLoginAt: users.lastLoginAt,
+        createdAt: users.createdAt,
+        anonymizedAt: users.anonymizedAt,
+        deletionRequestedAt: users.deletionRequestedAt,
+        orgs: sql<string>`coalesce((select string_agg(o.name, ', ' order by o.name) from organization_members m join organizations o on o.id = m.organization_id where m.user_id = ${users.id}), '')`,
+      })
+      .from(users)
+      .where(term ? sql`${users.name} ilike ${term} or ${users.email} ilike ${term}` : undefined)
+      .orderBy(desc(users.createdAt))
+      .limit(300),
+  );
+}
+
+export const AUDIT_PAGE_SIZE = 50;
+
+export async function listAuditLogs(userId: string, opts: { orgId?: string; page?: number; action?: string }) {
+  const page = Math.max(1, opts.page ?? 1);
+  return withPlatform(userId, async (tx) => {
+    const where = and(
+      opts.orgId ? eq(auditLogs.organizationId, opts.orgId) : undefined,
+      opts.action ? sql`${auditLogs.action} like ${opts.action.replace(/[%_]/g, "") + "%"}` : undefined,
+    );
+    const rows = await tx
+      .select({
+        id: auditLogs.id,
+        action: auditLogs.action,
+        summary: auditLogs.summary,
+        createdAt: auditLogs.createdAt,
+        ip: auditLogs.ip,
+        orgName: organizations.name,
+        actor: users.name,
+        actorEmail: users.email,
+      })
+      .from(auditLogs)
+      .leftJoin(organizations, eq(organizations.id, auditLogs.organizationId))
+      .leftJoin(users, eq(users.id, auditLogs.actorUserId))
+      .where(where)
+      .orderBy(desc(auditLogs.createdAt))
+      .limit(AUDIT_PAGE_SIZE + 1)
+      .offset((page - 1) * AUDIT_PAGE_SIZE);
+    const orgOptions = await tx.select({ id: organizations.id, name: organizations.name }).from(organizations).orderBy(organizations.name);
+    return { rows: rows.slice(0, AUDIT_PAGE_SIZE), hasMore: rows.length > AUDIT_PAGE_SIZE, page, orgOptions };
   });
 }
