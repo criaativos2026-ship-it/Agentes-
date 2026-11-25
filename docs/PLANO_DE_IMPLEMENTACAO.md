@@ -54,12 +54,24 @@ tests/unit, tests/integration, tests/e2e
 | Fase | Entregas | Status |
 |---|---|---|
 | 1 — Planejamento | Arquitetura, banco, estrutura, dependências, investigação de Skills | ✅ |
-| 2 — Fundação | Projeto Next, banco + migrações + RLS, autenticação, permissões, isolamento multiempresa, testes | ⏳ |
-| 3 — Interface | Painéis admin e cliente, navegação, dashboards com dados reais, componentes | ⏳ |
-| 4 — Agentes | Cadastro, construtor, versões, modelos, ferramentas, área de testes, publicação | ⏳ |
-| 5 — Execução | Motor, fila, worker, histórico, logs, aprovações, cancelamento, monitoramento | ⏳ |
-| 6 — Conhecimento e integrações | Upload, extração, RAG, central de integrações, conectores | ⏳ |
-| 7 — Comercialização | Planos, assinaturas, pagamentos, limites de uso, gateways preparados | ⏳ |
-| 8 — Testes e publicação | Revisão de segurança, E2E, documentação, deploy | ⏳ |
+| 2 — Fundação | Next.js, 44 tabelas + migrações, RLS em 43 tabelas, sessões no banco, Argon2id, limite de tentativas, papéis/permissões, isolamento multiempresa | ✅ |
+| 3 — Interface | Painéis admin e cliente responsivos, dashboards com dados reais, empresas, usuários, equipe, papéis, auditoria, minha conta/LGPD | ✅ |
+| 4 — Agentes | Construtor completo (identidade, inteligência, 21 ferramentas, conhecimento, acesso, testes, versões, publicação) | ✅ |
+| 5 — Execução | Motor agentic, fila, worker, retentativas, aprovações, cancelamento, monitoramento, consumo | ✅ |
+| 6 — Conhecimento e integrações | Upload/extração/RAG híbrido, análise de planilhas, central de integrações com teste real, OAuth Google, webhook WhatsApp | ✅ código · 🟡 credenciais |
+| 7 — Comercialização | Planos, assinaturas, pagamentos, inadimplência/suspensão, limites, Stripe e Mercado Pago preparados | ✅ código · 🟡 gateways desligados até configurar |
+| 8 — Testes e publicação | 63 testes de integração + 37 E2E, revisão de segurança, documentação, CI, Netlify | ✅ · 🟡 publicação depende das suas contas |
 
-O status de cada fase é atualizado neste arquivo ao final de cada entrega.
+Também entregues: Projetos personalizados (seção 13/15), Automações/workflows (seção 14), Central de suporte, Tarefas e Relatórios.
+
+## Pendências que dependem de você
+
+- Credenciais e contas externas (lista completa em `docs/INTEGRACOES.md`).
+- Contas Supabase e Netlify para publicar (passo a passo em `docs/DEPLOY.md`).
+- Definir nome/marca definitivos (editar só `design/tokens.css` e `src/components/logo.tsx`).
+- Revisão jurídica do aviso de privacidade; contato do encarregado e prazo de retenção (`src/lib/privacy.ts`).
+- Cadastrar os planos e preços que vão ser comercializados.
+
+## Próximas evoluções sugeridas
+
+Construtor visual (arrastar e soltar) sobre a definição em grafo já existente · MFA para administradores · CSP com nonce · respostas automáticas no WhatsApp sem aprovação (por configuração explícita) · mais gatilhos por evento (ex.: oportunidade criada) · streaming de tokens no chat · relatórios exportáveis em planilha.
