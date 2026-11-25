@@ -4,6 +4,8 @@ import { randomBytes } from "node:crypto";
 import { claimNext, recoverStale } from "./queue";
 import { processExecution } from "./engine";
 import { purgeOldRateLimits } from "@/server/auth/rate-limit";
+import { runBillingCycle } from "@/server/billing/service";
+import { purgeExpiredData } from "@/server/services/retention";
 
 export const workerId = () => `${hostname()}-${process.pid}-${randomBytes(3).toString("hex")}`;
 
@@ -22,9 +24,17 @@ export async function drainQueue(opts: { budgetMs: number; maxJobs?: number; onl
   return processed;
 }
 
-/** Manutenção periódica: execuções presas, janelas antigas do limite de tentativas. */
+let lastDaily = 0;
+
+/** Manutenção periódica: execuções presas, limites de tentativas; 1x por hora: cobrança e retenção (LGPD). */
 export async function maintenance() {
   const stale = await recoverStale();
   await purgeOldRateLimits();
+  if (Date.now() - lastDaily > 60 * 60 * 1000) {
+    lastDaily = Date.now();
+    const billing = await runBillingCycle().catch((e) => (console.error("[cobrança]", e), null));
+    const purged = await purgeExpiredData().catch((e) => (console.error("[retenção]", e), null));
+    return { ...stale, billing, purged };
+  }
   return stale;
 }
