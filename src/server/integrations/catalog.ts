@@ -30,6 +30,7 @@ export const INTEGRATIONS: IntegrationDef[] = [
       { key: "business_account_id", label: "ID da conta WhatsApp Business (WABA)", secret: false, required: false },
       { key: "access_token", label: "Token de acesso permanente (usuário do sistema)", secret: true, required: true },
       { key: "graph_version", label: "Versão da Graph API", secret: false, required: false, placeholder: GRAPH_VERSION_DEFAULT },
+      { key: "inbound_agent_id", label: "Agente que atende as mensagens recebidas", secret: false, required: false, hint: "Opcional. Respostas enviadas por ele passam por aprovação." },
     ],
     requirements: [
       "Conta Meta Business verificada e número aprovado no WhatsApp Business Platform.",

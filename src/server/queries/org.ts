@@ -147,3 +147,37 @@ export async function listPendingApprovals(ctx: OrgContext) {
       .orderBy(desc(approvals.requestedAt)),
   );
 }
+
+export async function listKnowledge(ctx: OrgContext) {
+  const { knowledgeBases, knowledgeDocuments } = await import("@/server/db/schema");
+  const { embeddingsAvailable } = await import("@/server/knowledge/embeddings");
+  return withOrg(ctx.org.id, ctx.user.id, async (tx) => {
+    const kbs = await tx.select().from(knowledgeBases).orderBy(knowledgeBases.name);
+    const docs = await tx
+      .select({ id: knowledgeDocuments.id, kbId: knowledgeDocuments.knowledgeBaseId, title: knowledgeDocuments.title, source: knowledgeDocuments.sourceType, status: knowledgeDocuments.status, error: knowledgeDocuments.error, chunks: knowledgeDocuments.chunkCount, embedded: knowledgeDocuments.embedded, size: knowledgeDocuments.sizeBytes, createdAt: knowledgeDocuments.createdAt })
+      .from(knowledgeDocuments)
+      .orderBy(desc(knowledgeDocuments.createdAt));
+    return { kbs: kbs.map((k) => ({ ...k, docs: docs.filter((d) => d.kbId === k.id) })), vector: await embeddingsAvailable(ctx.org.id) };
+  });
+}
+
+export async function listOrgIntegrations(ctx: OrgContext) {
+  const { integrations, integrationUsage, agents: agentsT } = await import("@/server/db/schema");
+  const { INTEGRATIONS } = await import("@/server/integrations/catalog");
+  return withOrg(ctx.org.id, ctx.user.id, async (tx) => {
+    const rows = await tx.select().from(integrations);
+    const usage = await tx
+      .select({ integrationId: integrationUsage.integrationId, n: sql<number>`count(*)::int`, last: sql<Date>`max(${integrationUsage.createdAt})` })
+      .from(integrationUsage)
+      .groupBy(integrationUsage.integrationId);
+    const agentOptions = await tx.select({ id: agentsT.id, name: agentsT.name }).from(agentsT).where(eq(agentsT.status, "published"));
+    return {
+      items: INTEGRATIONS.map((def) => {
+        const row = rows.find((r) => r.providerKey === def.key);
+        const u = row ? usage.find((x) => x.integrationId === row.id) : undefined;
+        return { def: { key: def.key, name: def.name, description: def.description, category: def.category, auth: def.auth, fields: def.fields, requirements: def.requirements, docsUrl: def.docsUrl }, row: row ? { status: row.status, config: row.config, connectedAt: row.connectedAt, lastCheckedAt: row.lastCheckedAt, lastError: row.lastError } : null, usage: u ? { count: u.n, last: u.last } : null };
+      }),
+      agentOptions,
+    };
+  });
+}

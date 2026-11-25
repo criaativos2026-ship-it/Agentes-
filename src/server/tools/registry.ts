@@ -8,6 +8,7 @@ import { gmailSend, sendEmailTool, whatsappSend } from "./builtin/communication"
 import { calendarCreateEvent, driveListFiles, mapsSearchPlaces, sheetsAppendRow } from "./builtin/google";
 import { hubspotCreateContact, hubspotSearchContacts, restApiRequest, sendWebhook } from "./builtin/crm-external";
 import { scheduleFollowup } from "./builtin/automation";
+import { analyzeTable } from "./builtin/table";
 
 /**
  * Registro central de ferramentas. Para criar uma nova: implemente ToolDefinition (validação Zod,
@@ -15,6 +16,7 @@ import { scheduleFollowup } from "./builtin/automation";
  */
 const ALL: ToolDefinition[] = [
   knowledgeSearch,
+  analyzeTable,
   currentDatetime,
   createTask,
   createReport,
