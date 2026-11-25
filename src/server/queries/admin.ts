@@ -199,3 +199,33 @@ export async function listAuditLogs(userId: string, opts: { orgId?: string; page
     return { rows: rows.slice(0, AUDIT_PAGE_SIZE), hasMore: rows.length > AUDIT_PAGE_SIZE, page, orgOptions };
   });
 }
+
+/** Consumo de IA por empresa e por modelo no período (AAAA-MM). */
+export async function usageReport(userId: string, period: string) {
+  return withPlatform(userId, async (tx) => {
+    const byOrg = await tx
+      .select({
+        orgId: organizations.id,
+        orgName: organizations.name,
+        tokensIn: sql<number>`coalesce(sum(${usageRecords.tokensIn}),0)::bigint`,
+        tokensOut: sql<number>`coalesce(sum(${usageRecords.tokensOut}),0)::bigint`,
+        cost: sql<number>`coalesce(sum(${usageRecords.costMicros}),0)::bigint`,
+        executions: sql<number>`count(*) filter (where ${usageRecords.kind} = 'execution')::int`,
+        toolCalls: sql<number>`count(*) filter (where ${usageRecords.kind} = 'tool_call')::int`,
+      })
+      .from(usageRecords)
+      .innerJoin(organizations, eq(organizations.id, usageRecords.organizationId))
+      .where(and(eq(usageRecords.period, period), eq(usageRecords.isTest, false)))
+      .groupBy(organizations.id, organizations.name)
+      .orderBy(desc(sql`3`));
+    const byModel = await tx
+      .select({ model: usageRecords.model, provider: usageRecords.provider, tokens: sql<number>`coalesce(sum(${usageRecords.tokensIn} + ${usageRecords.tokensOut}),0)::bigint`, cost: sql<number>`coalesce(sum(${usageRecords.costMicros}),0)::bigint` })
+      .from(usageRecords)
+      .where(and(eq(usageRecords.period, period), eq(usageRecords.kind, "llm_tokens")))
+      .groupBy(usageRecords.model, usageRecords.provider)
+      .orderBy(desc(sql`3`));
+    const periods = await tx.selectDistinct({ p: usageRecords.period }).from(usageRecords).orderBy(desc(usageRecords.period)).limit(24);
+    const [tests] = await tx.select({ tokens: sql<number>`coalesce(sum(${usageRecords.tokensIn} + ${usageRecords.tokensOut}),0)::bigint`, cost: sql<number>`coalesce(sum(${usageRecords.costMicros}),0)::bigint` }).from(usageRecords).where(and(eq(usageRecords.period, period), eq(usageRecords.isTest, true)));
+    return { byOrg: byOrg.map((r) => ({ ...r, tokensIn: Number(r.tokensIn), tokensOut: Number(r.tokensOut), cost: Number(r.cost) })), byModel: byModel.map((r) => ({ ...r, tokens: Number(r.tokens), cost: Number(r.cost) })), periods: periods.map((p) => p.p), tests: { tokens: Number(tests.tokens), cost: Number(tests.cost) } };
+  });
+}

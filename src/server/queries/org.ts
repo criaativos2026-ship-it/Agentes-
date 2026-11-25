@@ -100,3 +100,50 @@ export async function getOrgTeam(ctx: OrgContext) {
     return { members, roles: roleList.map((r) => ({ ...r, permissions: byRole.get(r.id) ?? [], memberCount: members.filter((m) => m.roleId === r.id).length })) };
   });
 }
+
+export async function listOrgAgents(ctx: OrgContext) {
+  const { agents: agentsT } = await import("@/server/db/schema");
+  const { inArray: inArr } = await import("drizzle-orm");
+  return withOrg(ctx.org.id, ctx.user.id, async (tx) => {
+    const filter = await visibleAgentIdsFilter(tx, ctx);
+    return tx
+      .select({ id: agentsT.id, name: agentsT.name, avatar: agentsT.avatar, description: agentsT.description, objective: agentsT.objective, category: agentsT.category, status: agentsT.status })
+      .from(agentsT)
+      .where(and(inArr(agentsT.status, ["published", "disabled"]), filter))
+      .orderBy(agentsT.name);
+  });
+}
+
+export async function getAgentChat(ctx: OrgContext, agentId: string, conversationId?: string) {
+  const { agents: agentsT, conversations, messages } = await import("@/server/db/schema");
+  const { asc } = await import("drizzle-orm");
+  const { messagesToChat } = await import("./agents");
+  const { canUseAgent } = await import("@/server/services/agent-access");
+  return withOrg(ctx.org.id, ctx.user.id, async (tx) => {
+    if (!(await canUseAgent(tx, ctx, agentId))) return null;
+    const [agent] = await tx.select().from(agentsT).where(eq(agentsT.id, agentId));
+    if (!agent || !["published", "disabled"].includes(agent.status)) return null;
+    const convs = await tx
+      .select({ id: conversations.id, title: conversations.title, updatedAt: conversations.updatedAt })
+      .from(conversations)
+      .where(and(eq(conversations.agentId, agentId), eq(conversations.userId, ctx.user.id), eq(conversations.isTest, false)))
+      .orderBy(desc(conversations.updatedAt))
+      .limit(30);
+    const current = conversationId ? convs.find((c) => c.id === conversationId) : undefined;
+    const msgs = current ? await tx.select().from(messages).where(eq(messages.conversationId, current.id)).orderBy(asc(messages.createdAt)) : [];
+    return { agent, conversations: convs, current: current ?? null, messages: messagesToChat(msgs) };
+  });
+}
+
+export async function listPendingApprovals(ctx: OrgContext) {
+  return withOrg(ctx.org.id, ctx.user.id, (tx) =>
+    tx
+      .select({ id: approvals.id, summary: approvals.summary, toolKey: approvals.toolKey, payload: approvals.payload, requestedAt: approvals.requestedAt, executionId: approvals.executionId, agentName: agents.name, by: users.name })
+      .from(approvals)
+      .innerJoin(executions, eq(executions.id, approvals.executionId))
+      .leftJoin(agents, eq(agents.id, executions.agentId))
+      .leftJoin(users, eq(users.id, executions.triggeredBy))
+      .where(eq(approvals.status, "pending"))
+      .orderBy(desc(approvals.requestedAt)),
+  );
+}

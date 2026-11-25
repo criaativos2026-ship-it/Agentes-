@@ -40,6 +40,7 @@ async function startServer() {
     APP_URL: BASE,
     CRON_SECRET: "e2e-cron-secret-0123456789abcdef",
     NODE_ENV: "production",
+    NEXUS_E2E_FAKE_LLM: "1",
   };
   const proc = spawn("npx", ["next", "start", "-p", String(PORT)], { env, stdio: ["ignore", "pipe", "pipe"], detached: true });
   proc.stderr.on("data", (d) => process.env.E2E_VERBOSE && process.stderr.write(d));

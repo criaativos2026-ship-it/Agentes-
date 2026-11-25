@@ -5,7 +5,7 @@ import type { LLMProvider, TurnRequest, TurnResult } from "../types";
  * DUBLÊ DE TESTE para os testes E2E (NEXUS_E2E_FAKE_LLM=1). Não é um recurso do produto:
  * só é ativado por variável de ambiente explícita e recusa rodar fora de localhost.
  * Comportamento determinístico: se a última mensagem do usuário contém "tarefa:", pede a ferramenta
- * create_task; se contém "email:", pede send_email (que exige aprovação); senão responde com eco.
+ * create_task; "email:" pede send_email; "lead:" pede crm_register_opportunity; senão responde com eco.
  */
 export function createE2EFakeProvider(): LLMProvider {
   const appUrl = process.env.APP_URL ?? "";
@@ -29,11 +29,14 @@ export function createE2EFakeProvider(): LLMProvider {
       const msg = userText.split("Mensagem:").pop()?.trim() ?? userText;
       const taskMatch = msg.match(/tarefa:\s*(.+)/i);
       const emailMatch = msg.match(/email:\s*(\S+@\S+)/i);
+      const leadMatch = msg.match(/lead:\s*(.+)/i);
       const call = taskMatch && req.tools.some((t) => t.name === "create_task")
         ? { id: `call_${Date.now()}`, name: "create_task", input: { title: taskMatch[1].slice(0, 120) } }
         : emailMatch && req.tools.some((t) => t.name === "send_email")
           ? { id: `call_${Date.now()}`, name: "send_email", input: { to: emailMatch[1], subject: "Teste", body: "Mensagem de teste" } }
-          : null;
+          : leadMatch && req.tools.some((t) => t.name === "crm_register_opportunity")
+            ? { id: `call_${Date.now()}`, name: "crm_register_opportunity", input: { name: leadMatch[1].slice(0, 120), source: "teste E2E" } }
+            : null;
       if (call) {
         return { text: "", toolCalls: [call], stop: "tool_use", usage, servedModel: req.model, assistantMessage: { role: "assistant", content: [{ type: "tool_use", ...call }] } };
       }
