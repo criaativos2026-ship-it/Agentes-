@@ -37,7 +37,7 @@ export default async function PlanosPage() {
                 {canEdit && <div data-slot="card-action"><PlanForm plan={{ ...p, validUntil: p.validUntil ?? "" }} /></div>}
               </CardHeader>
               <CardContent className="grid gap-2 text-sm">
-                <p className="text-2xl font-bold tracking-display">{money(p.priceCents, p.currency)}<span className="text-sm font-normal text-ink-muted"> / {p.intervalMonths === 1 ? "mês" : `${p.intervalMonths} meses`}</span></p>
+                <p className="text-2xl font-semibold tracking-display">{money(p.priceCents, p.currency)}<span className="text-sm font-normal text-ink-muted"> / {p.intervalMonths === 1 ? "mês" : `${p.intervalMonths} meses`}</span></p>
                 <ul className="grid gap-1 text-xs text-ink-muted">
                   <li>Agentes publicados: {lim(p.limits.agents)}</li>
                   <li>Usuários: {lim(p.limits.users)}</li>

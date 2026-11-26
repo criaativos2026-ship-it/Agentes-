@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NEXUS AI — Manual de marca</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Semi+Condensed:wght@400;500&display=swap">
+<style>
+/* VOICE formal and exact: a technical specification sheet, quiet and confident
+   IDEA the engineering spec sheet of a precision instrument — construction drawings, ruled data, numbers as heroes
+   PICTURE the symbol drawn large on its 64-unit construction grid, with node, stroke and axis callouts
+   COLOUR the brand itself: white canvas, ink #010205, greys, a single signal blue #1A44EA on the result node
+   TYPE Barlow Semi Condensed 400 for display and figures, Barlow for text (both SIL OFL)
+   LAYOUT spec-sheet bands separated by 1px rules; section links row; tiles at 32px radius for logo versions */
+:root{color-scheme:light;--bg:#FFFFFF;--alt:#F2F2F3;--alt2:#E7E7E8;--line:#D8D8DB;--line2:#A8A8AD;--ink:#010205;--body:#393A3D;--muted:#5C5E62;--subtle:#6B6D70;--signal:#1A44EA;--ok:#237A1D;--warn:#AC5702;--err:#BA171D}
+*{box-sizing:border-box;min-width:0}
+html{scroll-padding-top:72px}
+body{margin:0;background:var(--bg);color:var(--body);font:16px/1.6 Barlow,system-ui,-apple-system,"Segoe UI",sans-serif;overflow-x:clip}
+h1,h2,h3,.fig-n{font-family:"Barlow Semi Condensed",Barlow,sans-serif;font-weight:400;color:var(--ink);text-wrap:balance;margin:0}
+h1{font-size:clamp(40px,6vw,64px);line-height:1.02}
+h2{font-size:clamp(30px,3.6vw,44px);line-height:1.05}
+h3{font-size:22px;line-height:1.15;font-weight:500}
+p{margin:0;max-width:68ch}
+a{color:var(--signal)}
+.band{padding:clamp(36px,5vw,72px) max(5vw,16px);border-top:1px solid var(--line)}
+.in{max-width:1240px;margin:0 auto}
+.lab{font-size:13px;font-weight:500;color:var(--subtle);margin-bottom:10px}
+.lead{font-size:18px;color:var(--body);margin-top:14px}
+.top{position:sticky;top:0;z-index:5;background:rgba(255,255,255,.96);border-bottom:1px solid var(--line)}
+.top .in{display:flex;align-items:center;gap:24px;padding:12px max(5vw,16px);max-width:none}
+.top svg{height:22px;width:auto;flex:none}
+.scroll{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+.scroll a{flex:none;padding:8px 12px;border-radius:6px;color:var(--muted);text-decoration:none;font-size:14px;font-weight:500}
+.scroll a:hover{background:var(--alt);color:var(--ink)}
+.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:clamp(24px,4vw,64px);align-items:center;padding-top:clamp(28px,4vw,56px)}
+.hero .meta{display:flex;gap:24px;flex-wrap:wrap;margin-top:28px;padding-top:16px;border-top:1px solid var(--ink);font-size:14px;color:var(--muted)}
+.hero .meta b{display:block;color:var(--ink);font-weight:500}
+.fig{position:relative;background:var(--alt);border-radius:32px;aspect-ratio:1/0.82;overflow:hidden}
+.fig>svg{position:absolute;inset:0;width:100%;height:100%}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:0 32px;margin-top:32px}
+.spec{border-top:1px solid var(--line);padding:16px 0}
+.spec h3{margin-bottom:6px}
+.spec p{color:var(--muted);font-size:15px}
+.big{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:24px;margin-top:32px}
+.fig-n{font-size:clamp(40px,5vw,56px);line-height:1;font-variant-numeric:tabular-nums}
+.stat{border-top:1px solid var(--ink);padding-top:14px}
+.stat p{font-size:14px;color:var(--muted);margin-top:8px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,460px),1fr));gap:16px;margin-top:32px}
+.tile{border-radius:32px;min-height:220px;display:grid;place-items:center;padding:36px;position:relative}
+.tile svg{width:min(100%,280px);height:auto}
+.tile.sq svg{width:96px}
+.tile small{position:absolute;left:24px;bottom:18px;font-size:13px;color:var(--subtle)}
+.tile.dark{background:var(--ink)}.tile.dark small{color:#A8A8AD}
+.tile.light{background:var(--alt)}
+.tile.white{background:#fff;border:1px solid var(--line)}
+.dont{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:16px;margin-top:32px}
+.dont figure{margin:0}
+.dont .box{background:var(--alt);border-radius:16px;height:150px;display:grid;place-items:center;overflow:hidden}
+.dont svg{width:150px;height:auto}
+.dont figcaption{font-size:14px;color:var(--body);margin-top:10px;display:flex;gap:8px}
+.dont figcaption::before{content:"×";color:var(--err);font-weight:600}
+.prop{display:flex;height:72px;border-radius:16px;overflow:hidden;margin-top:32px;border:1px solid var(--line)}
+.prop div{display:flex;align-items:flex-end;padding:10px 12px;font-size:13px}
+.sw{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,150px),1fr));gap:16px;margin-top:24px}
+.sw div{border-top:1px solid var(--line);padding-top:10px}
+.sw i{display:block;height:64px;border-radius:8px;margin-bottom:10px;border:1px solid rgba(1,2,5,.08)}
+.sw b{display:block;color:var(--ink);font-weight:500}
+.sw span{font-size:13px;color:var(--muted);display:block}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;overflow-wrap:anywhere}
+.type{display:grid;gap:0;margin-top:32px}
+.type div{display:grid;grid-template-columns:200px minmax(0,1fr);gap:24px;align-items:baseline;border-top:1px solid var(--line);padding:18px 0}
+.type .k{font-size:13px;color:var(--subtle)}
+.ui{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:24px;margin-top:32px;align-items:start}
+.card{border:1px solid var(--line);border-radius:16px;padding:20px}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 20px;border-radius:8px;font:500 15px Barlow,sans-serif;border:1px solid transparent;cursor:pointer}
+.btn.p{background:var(--ink);color:#fff}.btn.p:hover{background:#333}
+.btn.o{background:#fff;border-color:var(--line2);color:var(--ink)}.btn.o:hover{border-color:var(--ink)}
+.btn.d{background:#fff;border-color:var(--err);color:var(--err)}
+.btn:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
+.row{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.badge{display:inline-flex;padding:2px 8px;border-radius:4px;font-size:12px;font-weight:500;border:1px solid}
+.field{display:block;width:100%;height:44px;border:1px solid var(--line2);border-radius:8px;padding:0 14px;font:16px Barlow,sans-serif;margin-top:6px;background:#fff;color:var(--ink)}
+.field:focus{outline:none;border-color:var(--signal);box-shadow:0 0 0 1px var(--signal)}
+.shot{display:block;width:100%;height:auto;border-radius:16px;border:1px solid var(--line)}
+.shots{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,1fr);gap:24px;margin-top:32px;align-items:start}
+.shots .ph{border-radius:28px;border:8px solid var(--ink)}
+table{width:100%;border-collapse:collapse;margin-top:28px;font-size:15px}
+th,td{text-align:left;padding:12px 12px 12px 0;border-top:1px solid var(--line);vertical-align:top}
+th{font-weight:500;color:var(--subtle);font-size:13px}
+td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.dot{display:inline-block;width:14px;height:14px;border-radius:3px;vertical-align:-2px;margin-right:8px;border:1px solid rgba(1,2,5,.1)}
+.voice{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,460px),1fr));gap:16px;margin-top:28px}
+.voice div{border-radius:16px;padding:18px 20px;background:var(--alt)}
+.voice .y{border-left:0}
+.voice b{display:block;font-size:13px;font-weight:500;color:var(--subtle);margin-bottom:6px}
+ul.check{list-style:none;padding:0;margin:28px 0 0;max-width:760px}
+ul.check li{border-top:1px solid var(--line);padding:12px 0 12px 34px;position:relative}
+ul.check li::before{content:"";position:absolute;left:0;top:14px;width:18px;height:18px;border-radius:4px;border:1.5px solid var(--line2)}
+ul.check li.ok::before{background:var(--ink);border-color:var(--ink)}
+ul.check li.ok::after{content:"";position:absolute;left:6px;top:17px;width:5px;height:9px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
+.note{font-size:14px;color:var(--muted);margin-top:16px}
+footer{padding:32px max(5vw,16px);border-top:1px solid var(--ink);font-size:13px;color:var(--subtle)}
+footer .in{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;align-items:center}
+@media(max-width:900px){.hero{grid-template-columns:minmax(0,1fr)}.shots{grid-template-columns:minmax(0,1fr)}.shots .ph{max-width:300px}}
+@media(max-width:600px){.type div{grid-template-columns:minmax(0,1fr);gap:6px}.top svg{display:none}table{font-size:13px}.stack thead{display:none}.stack tr{display:grid;padding-block:10px;border-top:1px solid var(--line)}.stack td{display:flow-root;border:0;padding:3px 0;padding-inline-start:8em;text-align:start}.stack td::before{content:attr(data-l);float:inline-start;width:7.5em;margin-inline-start:-8em;color:var(--subtle)}.stack td.n{text-align:start}}
+@media(prefers-reduced-motion:no-preference){.tile{transition:transform .2s}.tile:hover{transform:translateY(-2px)}}
+</style>
+<script>new MutationObserver(()=>{for(const c of document.querySelectorAll('.stack td:not([data-l])')){let i=0,p=c;while(p=p.previousElementSibling)i+=p.colSpan;c.dataset.l=c.closest('table').rows[0].cells[i]?.textContent||''}}).observe(document,{childList:true,subtree:true})</script>
+</head>
+<body>
+<div class="top"><div class="in">{{SIG_SMALL}}
+<nav class="scroll" aria-label="Seções">
+<a href="#estrategia">Estratégia</a><a href="#simbolo">Símbolo</a><a href="#logotipo">Logotipo</a><a href="#cores">Cores</a><a href="#tipografia">Tipografia</a><a href="#interface">Interface</a><a href="#aplicacoes">Aplicações</a><a href="#acessibilidade">Acessibilidade</a><a href="#implantacao">Implantação</a>
+</nav></div></div>
+
+<section class="band" style="border-top:0"><div class="in hero">
+<div>
+<p class="lab">Manual de marca · versão 1.0 · novembro de 2026</p>
+<h1>NEXUS AI</h1>
+<p class="lead">Agentes de IA sob medida, configurados e operados com rigor de engenharia: controle, segurança e resultado medido.</p>
+<div class="meta"><span><b>Personalidade</b>Preciso · sóbrio · confiável</span><span><b>Mercado</b>SaaS B2B · Brasil</span><span><b>Arquivos</b><code>public/brand/</code></span></div>
+</div>
+<div class="fig" role="img" aria-label="Construção do símbolo em grade de 64 unidades: dois nós ligados por um único traço em forma de N">{{CONSTRUCTION}}</div>
+</div></section>
+
+<section class="band" id="estrategia"><div class="in">
+<p class="lab">1 · Estratégia</p>
+<h2>A marca que parece instrumento de precisão</h2>
+<p class="lead">A categoria de IA está cheia de gradientes roxos, brilhos e robôs simpáticos que prometem mágica. Quem compra um agente para a própria empresa tem outro medo: perder o controle. O NEXUS AI fica do lado oposto: sóbrio como software de engenharia, claro como um painel de bordo.</p>
+<div class="cols">
+<div class="spec"><h3>Você controla o agente</h3><p>Ações sensíveis pedem aprovação humana; versões travadas; publicação explícita.</p></div>
+<div class="spec"><h3>Seus dados ficam separados</h3><p>Isolamento por empresa no banco de dados, testado automaticamente.</p></div>
+<div class="spec"><h3>Você vê o que aconteceu</h3><p>Cada passo de cada execução fica registrado e auditável.</p></div>
+<div class="spec"><h3>Nada de faz de conta</h3><p>Integração só aparece como conectada depois de um teste real de comunicação.</p></div>
+</div>
+<div class="voice">
+<div><b>Use</b>“O agente pediu sua aprovação para enviar a mensagem.”</div>
+<div><b>Evite</b>“Nossa IA incrível já resolveu tudo!”</div>
+<div><b>Use</b>“Integração com falha: o servidor recusou a chave.”</div>
+<div><b>Evite</b>“Ops! Algo deu errado.”</div>
+</div>
+<p class="note">Tom de voz: frases curtas, verbos concretos, números com unidade e período. Nunca prometer o que o sistema não mede.</p>
+</div></section>
+
+<section class="band" id="simbolo"><div class="in">
+<p class="lab">2 · Símbolo</p>
+<h2>Nexo: um caminho entre dois nós</h2>
+<p class="lead">Um “N” desenhado como um único traço do nó de entrada (base, à esquerda) ao nó de resultado (topo, à direita). É o que o produto faz: recebe uma demanda, percorre passos controlados e entrega um resultado. O nó de resultado é o único ponto de cor da marca.</p>
+<div class="big">
+<div class="stat"><div class="fig-n">64</div><p>unidades de grade; hastes em x = 19 e x = 45</p></div>
+<div class="stat"><div class="fig-n">6</div><p>unidades de traço, cantos vivos</p></div>
+<div class="stat"><div class="fig-n">6,5</div><p>unidades de raio em cada nó</p></div>
+<div class="stat"><div class="fig-n">1</div><p>ponto de cor: o azul de sinal <code>#1A44EA</code></p></div>
+</div>
+</div></section>
+
+<section class="band" id="logotipo"><div class="in">
+<p class="lab">3 · Logotipo</p>
+<h2>Versões, proteção e limites</h2>
+<p class="lead">“NEXUS” em Barlow Semi Condensed 500 e “AI” em 400, caixa alta, espaçamento aberto. As letras são contornos: os arquivos não dependem de fonte instalada.</p>
+<div class="tiles">
+<div class="tile white">{{SIG}}<small>Assinatura · padrão</small></div>
+<div class="tile dark">{{SIG_NEG}}<small>Assinatura negativa</small></div>
+<div class="tile light sq">{{SYM}}<small>Símbolo</small></div>
+<div class="tile light sq">{{ICON}}<small>Ícone de aplicativo e favicon</small></div>
+</div>
+<div class="cols">
+<div class="spec"><h3>Área de proteção</h3><p>Espaço livre em volta igual ao diâmetro de um nó, em todos os lados.</p></div>
+<div class="spec"><h3>Tamanho mínimo</h3><p>Assinatura com 96 px (25 mm impresso). Símbolo com 16 px (5 mm). Abaixo disso, use o ícone.</p></div>
+<div class="spec"><h3>Fundos</h3><p>Branco, cinza #F2F2F3, tinta #010205 ou foto escura uniforme (versão negativa).</p></div>
+</div>
+<h3 style="margin-top:40px">Usos incorretos</h3>
+<div class="dont">
+<figure><div class="box">{{BAD_COLOR}}</div><figcaption>Trocar a cor do nó ou colorir o N</figcaption></figure>
+<figure><div class="box">{{BAD_SKEW}}</div><figcaption>Distorcer, inclinar ou girar</figcaption></figure>
+<figure><div class="box">{{BAD_GLOW}}</div><figcaption>Aplicar gradiente, brilho ou sombra</figcaption></figure>
+<figure><div class="box" style="background:#010205">{{BAD_POS}}</div><figcaption>Usar a versão positiva sobre fundo escuro</figcaption></figure>
+</div>
+</div></section>
+
+<section class="band" id="cores"><div class="in">
+<p class="lab">4 · Cores</p>
+<h2>Branco, tinta e um único sinal azul</h2>
+<p class="lead">Não existe cor de destaque de marca: a ação principal é preta. O azul é funcional (foco, links, nó do símbolo) e os estados aparecem sempre com texto.</p>
+<div class="prop" role="img" aria-label="Proporção: 80% branco e cinzas, 15% tinta, até 5% azul e estados">
+<div style="flex:80;background:#fff;color:var(--muted)">80% branco e cinzas</div>
+<div style="flex:15;background:#010205;color:#fff">15% tinta</div>
+<div style="flex:5;background:#1A44EA" title="5% azul e estados"></div>
+</div>
+<div class="sw">{{SWATCHES}}</div>
+<p class="note">Gráficos: no máximo duas séries com cor, <code>#1649E8</code> (principal) e <code>#BA171D</code> (falhas), paleta validada para daltonismo e contraste. Sempre com legenda e opção de ver como tabela.</p>
+</div></section>
+
+<section class="band" id="tipografia"><div class="in">
+<p class="lab">5 · Tipografia</p>
+<h2>A elegância vem do tamanho, não do negrito</h2>
+<p class="lead">Barlow Semi Condensed para títulos e números; Barlow para a interface. Ambas com licença SIL Open Font License, livres para uso comercial e em logotipo.</p>
+<div class="type">
+<div><span class="k">Título de página · Semi Condensed 400 · 36</span><span style="font:400 36px/1.1 'Barlow Semi Condensed',sans-serif;color:var(--ink)">Boa noite, Carlos</span></div>
+<div><span class="k">Número de destaque · Semi Condensed 400 · 40</span><span style="font:400 40px/1 'Barlow Semi Condensed',sans-serif;color:var(--ink);font-variant-numeric:tabular-nums">100% · 720</span></div>
+<div><span class="k">Título de cartão · Semi Condensed 500 · 18</span><span style="font:500 18px 'Barlow Semi Condensed',sans-serif;color:var(--ink)">Execuções por dia</span></div>
+<div><span class="k">Texto · Barlow 400 · 15–16</span><span>Resumo dos últimos 30 dias, calculado a partir das execuções registradas.</span></div>
+<div><span class="k">Rótulo · Barlow 500 · 13</span><span style="font-size:13px;font-weight:500;color:var(--subtle)">Tarefas executadas</span></div>
+</div>
+<p class="note">Escala: 12 · 13 · 15 · 18 · 28/36 · 32/40. Caixa alta só em rótulos curtos de seção do menu.</p>
+</div></section>
+
+<section class="band" id="interface"><div class="in">
+<p class="lab">6 · Interface</p>
+<h2>Bordas finas, réguas e um botão preto por área</h2>
+<p class="lead">Raios de 8 px em botões e campos, 16 px em cartões e 32 px em blocos de destaque. Quase nenhuma sombra: cartões se separam por uma borda de 1 px.</p>
+<div class="ui">
+<div class="card"><h3>Botões</h3><div class="row"><button class="btn p" type="button">Publicar agente</button><button class="btn o" type="button">Testar</button><button class="btn d" type="button">Desativar</button></div><p class="note">Use Tab para ver o foco azul de 2 px.</p></div>
+<div class="card"><p class="lab" style="margin:0">Taxa de sucesso</p><div class="fig-n" style="margin-top:12px">100%</div><p class="note" style="border-top:1px solid var(--line);padding-top:8px;margin-top:16px">Execuções finalizadas · exemplo</p></div>
+<div class="card"><h3>Campos e estados</h3><label style="display:block;margin-top:12px;font-size:14px;font-weight:500;color:var(--ink)" for="f1">Nome do agente</label><input class="field" id="f1" value="Assistente Administrativo"><div class="row"><span class="badge" style="color:var(--ok);border-color:#237A1D55;background:#237A1D12">Concluída</span><span class="badge" style="color:var(--warn);border-color:#AC570255;background:#AC570212">Aguardando aprovação</span><span class="badge" style="color:var(--err);border-color:#BA171D55;background:#BA171D12">Com erro</span></div></div>
+</div>
+</div></section>
+
+<section class="band" id="aplicacoes"><div class="in">
+<p class="lab">7 · Aplicações</p>
+<h2>O sistema já aplicado</h2>
+<p class="lead">Telas reais do NEXUS AI no novo padrão, capturadas do banco de testes automatizados (dados fictícios).</p>
+<div class="shots"><img class="shot" src="{{SHOT_DESK}}" alt="Painel da empresa no computador: indicadores, gráfico de execuções e atividades recentes"><img class="shot ph" src="{{SHOT_PHONE}}" alt="Painel da empresa no celular"></div>
+<table class="stack"><thead><tr><th>Aplicação</th><th>Regra</th></tr></thead><tbody>
+<tr><td>E-mail transacional</td><td>Assinatura positiva com 120 px no topo, texto em #393A3D, link em #1A44EA.</td></tr>
+<tr><td>Redes sociais</td><td>Avatar = ícone de aplicativo. Posts em fundo branco ou tinta, com um número grande em Semi Condensed 400.</td></tr>
+<tr><td>Proposta comercial</td><td>Capa em tinta com assinatura negativa; miolo branco com réguas de 1 px.</td></tr>
+<tr><td>Fotografia</td><td>Pessoas reais trabalhando, luz natural, tons neutros. Nada de robôs humanoides ou cérebros brilhando.</td></tr>
+</tbody></table>
+</div></section>
+
+<section class="band" id="acessibilidade"><div class="in">
+<p class="lab">8 · Acessibilidade</p>
+<h2>Contraste medido, nunca só cor</h2>
+<table class="stack"><thead><tr><th>Cor</th><th>Uso</th><th class="n">Sobre #FFFFFF</th><th class="n">Sobre #F2F2F3</th></tr></thead><tbody>{{CONTRAST}}</tbody></table>
+<p class="note">Critério WCAG 2.2: 4,5 : 1 para texto, 3 : 1 para elementos gráficos. O nó azul sobre tinta (versão negativa) tem 3,0 : 1. A interface respeita a preferência por movimento reduzido.</p>
+</div></section>
+
+<section class="band" id="implantacao"><div class="in">
+<p class="lab">9 · Implantação</p>
+<h2>O que já está feito e o que falta</h2>
+<ul class="check">
+<li class="ok">Tokens de cor, tipografia, raio e sombra em <code>design/tokens.css</code></li>
+<li class="ok">Componentes da interface no novo sistema (botões, cartões, campos, menus, indicadores, chat)</li>
+<li class="ok">Favicon SVG, ícone Apple e manifesto com ícones 192 e 512</li>
+<li class="ok">Arquivos da marca em SVG: assinatura, logotipo, símbolo, versões negativas e monocromática</li>
+<li>Busca de marca e registro no INPI (classes 9 e 42) com um profissional: “Nexus” é usado por outras empresas de tecnologia</li>
+<li>Domínio e e-mail com a marca</li>
+<li>Modelos de e-mail transacional com a assinatura</li>
+</ul>
+<p class="note">Este manual não afirma que o nome ou o símbolo estão disponíveis para registro: nenhuma busca de anterioridade foi feita.</p>
+</div></section>
+
+<footer><div class="in">{{SIG_SMALL}}<span>Manual de marca NEXUS AI · versão 1.0 · documento-fonte: <code>docs/MANUAL_DE_MARCA.md</code></span></div></footer>
+</body>
+</html>

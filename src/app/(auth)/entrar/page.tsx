@@ -12,7 +12,7 @@ export default async function EntrarPage({ searchParams }: { searchParams: Promi
   const { senha } = await searchParams;
   return (
     <>
-      <h1 className="text-xl font-bold tracking-display">Entrar</h1>
+      <h1 className="text-xl font-semibold tracking-display">Entrar</h1>
       <p className="mt-1 mb-6 text-sm text-ink-muted">Acesse o painel da sua empresa.</p>
       {senha === "redefinida" && (
         <p role="status" className="mb-4 rounded-lg border border-success/30 bg-success/10 px-3 py-2.5 text-sm text-success">

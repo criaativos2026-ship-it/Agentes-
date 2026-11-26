@@ -22,10 +22,10 @@ export function UserMenu({ name, email, roleLabel, isPlatform, multiOrg, compact
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        className={cn("flex items-center gap-3 rounded-lg text-left outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-electric/40", compact ? "p-1" : "w-full p-2")}
+        className={cn("flex items-center gap-3 rounded-lg text-left outline-none hover:bg-surface-2 focus-visible:outline-2 focus-visible:outline-electric", compact ? "p-1" : "w-full p-2")}
         aria-label="Menu da conta"
       >
-        <span className="grid size-9 shrink-0 place-items-center rounded-full bg-gradient-to-br from-electric to-brand text-xs font-bold text-white">{initials(name)}</span>
+        <span className="grid size-9 shrink-0 place-items-center rounded-full bg-ink text-xs font-semibold text-on-brand">{initials(name)}</span>
         {!compact && (
           <span className="min-w-0 flex-1">
             <span className="block truncate text-sm font-medium text-ink">{name}</span>

@@ -16,7 +16,7 @@ export default async function AceitePage() {
   return (
     <main className="mx-auto flex min-h-dvh max-w-2xl flex-col px-5 py-8">
       <Logo />
-      <h1 className="mt-8 text-2xl font-bold tracking-display">{isUpdate ? "O aviso de privacidade foi atualizado" : "Antes de continuar"}</h1>
+      <h1 className="mt-8 text-2xl font-semibold tracking-display">{isUpdate ? "O aviso de privacidade foi atualizado" : "Antes de continuar"}</h1>
       <p className="mt-2 mb-4 text-sm text-ink-muted">Leia como tratamos seus dados. Para usar a plataforma é preciso concordar.</p>
       <div className="max-h-[50dvh] overflow-y-auto rounded-xl border border-line bg-surface p-5">
         <PrivacyNotice />

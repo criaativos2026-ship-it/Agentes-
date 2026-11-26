@@ -15,7 +15,7 @@ export default async function EmpresasPage() {
   return (
     <main className="mx-auto flex min-h-dvh max-w-lg flex-col justify-center px-5 py-10">
       <Logo className="mb-8" />
-      <h1 className="text-xl font-bold tracking-display">Olá, {user.name.split(" ")[0]}</h1>
+      <h1 className="text-xl font-semibold tracking-display">Olá, {user.name.split(" ")[0]}</h1>
       <p className="mt-1 mb-6 text-sm text-ink-muted">Escolha a empresa que deseja acessar.</p>
       {orgs.length === 0 ? (
         <EmptyState icon={Building2Icon} title="Você ainda não faz parte de nenhuma empresa" description="Peça ao administrador da sua empresa para liberar seu acesso." />

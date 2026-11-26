@@ -29,13 +29,13 @@ function NavList({ sections, onNavigate }: { sections: NavSection[]; onNavigate?
                     aria-current={active ? "page" : undefined}
                     className={cn(
                       "group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
-                      active ? "bg-surface-2 text-ink shadow-[inset_2px_0_0_var(--nx-brand)]" : "text-ink-muted hover:bg-surface-2/60 hover:text-ink",
+                      active ? "bg-surface-3 text-ink" : "text-ink-muted hover:bg-surface-2 hover:text-ink",
                     )}
                   >
-                    <Icon className={cn("size-[18px]", active ? "text-brand" : "text-ink-subtle group-hover:text-ink-muted")} aria-hidden />
+                    <Icon className={cn("size-[18px]", active ? "text-ink" : "text-ink-subtle group-hover:text-ink")} aria-hidden />
                     <span className="flex-1 truncate">{item.label}</span>
                     {item.badge ? (
-                      <span className="rounded-full bg-brand px-1.5 text-[11px] font-bold text-primary-foreground tabular-nums">{item.badge}</span>
+                      <span className="rounded-full bg-brand px-1.5 text-[11px] font-semibold text-primary-foreground tabular-nums">{item.badge}</span>
                     ) : null}
                   </Link>
                 </li>
@@ -67,7 +67,7 @@ export function AppShell({
   const [open, setOpen] = useState(false);
   return (
     <div className="min-h-dvh lg:grid lg:grid-cols-[260px_1fr]">
-      <aside className="sticky top-0 hidden h-dvh flex-col border-r border-line bg-bg-alt/70 backdrop-blur lg:flex">
+      <aside className="sticky top-0 hidden h-dvh flex-col border-r border-line bg-bg-alt lg:flex">
         <div className="px-5 pt-5 pb-4">
           <Link href={homeHref} aria-label="Início">
             <Logo />
@@ -83,7 +83,7 @@ export function AppShell({
       </aside>
 
       <div className="min-w-0">
-        <header className="sticky top-0 z-40 flex h-14 items-center gap-3 border-b border-line bg-bg/85 px-4 backdrop-blur lg:hidden">
+        <header className="sticky top-0 z-40 flex h-14 items-center gap-3 border-b border-line bg-bg px-4 lg:hidden">
           <button
             type="button"
             onClick={() => setOpen(true)}

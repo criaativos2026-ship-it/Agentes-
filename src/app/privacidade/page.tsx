@@ -11,7 +11,7 @@ export default function PrivacidadePage() {
       <Link href="/" aria-label="Início">
         <Logo />
       </Link>
-      <h1 className="mt-8 mb-6 text-2xl font-bold tracking-display">Aviso de privacidade</h1>
+      <h1 className="mt-8 mb-6 text-2xl font-semibold tracking-display">Aviso de privacidade</h1>
       <PrivacyNotice />
     </main>
   );

@@ -41,7 +41,7 @@ export default async function AgentChatPage({ params, searchParams }: { params: 
         <div className="mb-3 flex items-center gap-3">
           <span className="grid size-10 place-items-center rounded-xl bg-surface-2 text-xl">{data.agent.avatar ?? "🤖"}</span>
           <div>
-            <h1 className="text-lg font-bold tracking-display">{data.agent.name}</h1>
+            <h1 className="text-lg font-semibold tracking-display">{data.agent.name}</h1>
             <p className="text-xs text-ink-muted">{data.agent.objective ?? data.agent.description}</p>
           </div>
         </div>

@@ -10,7 +10,7 @@ export default async function RedefinirSenhaPage({ params }: { params: Promise<{
   const valid = await isResetTokenValid(token);
   return (
     <>
-      <h1 className="text-xl font-bold tracking-display">Criar nova senha</h1>
+      <h1 className="text-xl font-semibold tracking-display">Criar nova senha</h1>
       {valid ? (
         <>
           <p className="mt-1 mb-6 text-sm text-ink-muted">Ao salvar, todas as sessões abertas serão encerradas.</p>

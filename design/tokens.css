@@ -1,55 +1,61 @@
 /* =====================================================================
    DESIGN TOKENS — NEXUS AI  (fonte única da identidade visual)
-   Origem: direção visual do briefing (fundo azul-marinho/grafite, detalhes em
-   laranja e azul elétrico). Nome e marca ainda são PROVISÓRIOS — quando a marca
-   definitiva existir, edite SOMENTE este arquivo.
-   Contraste conferido (WCAG AA) para texto sobre --nx-bg e --nx-surface.
+   Identidade: docs/MANUAL_DE_MARCA.md. Sistema de referência: design.md fornecido
+   pelo cliente (tela branca, tinta quase preta, tipografia estreita e técnica, um único
+   azul de sinal para foco/links, sem cores de marca chamativas).
+   Contraste (WCAG) conferido sobre #FFFFFF e #F2F2F3 — ver manual, seção Acessibilidade.
    ===================================================================== */
 
 :root {
-  /* ---------- Superfícies (tema escuro padrão) ---------- */
-  --nx-bg:            #0A0F1C; /* azul-marinho profundo — fundo da aplicação */
-  --nx-bg-alt:        #0D1424; /* faixas e áreas secundárias */
-  --nx-surface:       #111A2C; /* cartões */
-  --nx-surface-2:     #16213A; /* cartões elevados, menus, hover */
-  --nx-border:        #1F2A44; /* bordas discretas */
-  --nx-border-strong: #2B3A5C;
+  /* ---------- Superfícies (tema claro) ---------- */
+  --nx-bg:            #FFFFFF; /* tela */
+  --nx-bg-alt:        #F2F2F3; /* faixas, barra lateral, áreas secundárias */
+  --nx-surface:       #FFFFFF; /* cartões */
+  --nx-surface-2:     #F2F2F3; /* hover, menus, blocos internos */
+  --nx-surface-3:     #E7E7E8; /* trilhos, estados pressionados */
+  --nx-border:        #D8D8DB; /* bordas e réguas */
+  --nx-border-strong: #A8A8AD; /* bordas de campos */
 
   /* ---------- Texto ---------- */
-  --nx-ink:           #E7ECF5; /* texto principal (15.6:1 sobre --nx-bg) */
-  --nx-ink-muted:     #9AA8C2; /* texto secundário (7.9:1) */
-  --nx-ink-subtle:    #6B7A96; /* rótulos e dicas (4.6:1) */
+  --nx-ink:           #010205; /* títulos e texto principal (20.7:1) */
+  --nx-ink-body:      #393A3D; /* texto corrido (11.4:1) */
+  --nx-ink-muted:     #5C5E62; /* secundário (6.5:1) */
+  --nx-ink-subtle:    #6B6D70; /* rótulos e dicas (5.2:1) */
 
   /* ---------- Marca ---------- */
-  --nx-brand:         #FF7A1A; /* laranja — ação principal */
-  --nx-brand-hover:   #FF8E3C;
-  --nx-on-brand:      #0A0F1C; /* texto sobre laranja (7.6:1) */
-  --nx-electric:      #3D8BFF; /* azul elétrico — destaques, links, foco */
-  --nx-electric-soft: #3D8BFF26;
+  --nx-brand:         #010205; /* tinta: ação principal */
+  --nx-brand-hover:   #333333;
+  --nx-brand-pressed: #4D4D4D;
+  --nx-on-brand:      #FFFFFF;
+  --nx-electric:      #1A44EA; /* azul de sinal: foco, links, nó do símbolo (6.9:1) */
+  --nx-electric-soft: #1A44EA1F;
 
-  /* ---------- Estados ---------- */
-  --nx-success:       #2BD47D;
-  --nx-warning:       #F5B341;
-  --nx-danger:        #FF5C5C;
-  --nx-info:          var(--nx-electric);
+  /* ---------- Estados (sempre com texto/ícone, nunca só cor) ---------- */
+  --nx-success:       #237A1D; /* 5.4:1 */
+  --nx-warning:       #AC5702; /* 5.1:1 */
+  --nx-danger:        #BA171D; /* 6.5:1 */
+  --nx-info:          #1649E8;
 
-  /* ---------- Tipografia (Inter — padrão aprovado) ---------- */
-  --nx-font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  /* ---------- Tipografia (Barlow / Barlow Semi Condensed — SIL OFL) ---------- */
+  --nx-font-sans: "Barlow", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --nx-font-display: "Barlow Semi Condensed", "Barlow", system-ui, sans-serif;
   --nx-font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-  --nx-tracking-display: -0.02em;
-  --nx-tracking-eyebrow: 0.14em;
+  --nx-tracking-display: 0;
+  --nx-tracking-eyebrow: 0.08em;
 
   /* ---------- Forma ---------- */
-  --nx-radius: 0.75rem; /* 12px: cartões e campos */
+  --nx-radius: 0.5rem;     /* 8px: botões e campos */
+  --nx-radius-card: 1rem;  /* 16px: cartões */
+  --nx-radius-tile: 2rem;  /* 32px: blocos de destaque */
 
   /* ---------- Gráficos ----------
-     Série categórica em ordem fixa (nunca ciclar). Validada com a skill dataviz
-     (validate_palette.js, modo escuro, superfície #111A2C): faixa de luminosidade,
-     croma, separação para daltonismo (ΔE ≥ 8), visão normal e contraste ≥ 3:1 — todos PASS. */
-  --nx-chart-1: #3D8BFF; /* azul elétrico */
-  --nx-chart-2: #E0681A; /* laranja (passo escuro da marca) */
-  --nx-chart-3: #1FA864; /* verde */
-  --nx-chart-4: #9B6BF0; /* violeta */
-  --nx-chart-critical: #F0524F; /* status crítico (erro) — reservado, sempre com rótulo */
-  --nx-chart-grid: #1F2A44;
+     Duas séries no máximo, em ordem fixa. Validado com a skill dataviz (validate_palette.js,
+     modo claro, superfície #FFFFFF): todos os testes PASS. Um conjunto de 4 cores reprovou, por isso
+     o sistema não usa paleta categórica larga. */
+  --nx-chart-1: #1649E8;       /* série principal */
+  --nx-chart-2: #6B6D70;       /* série de comparação (neutra) */
+  --nx-chart-3: #A8A8AD;
+  --nx-chart-4: #393A3D;
+  --nx-chart-critical: #BA171D; /* falhas — sempre com rótulo */
+  --nx-chart-grid: #E7E7E8;
 }

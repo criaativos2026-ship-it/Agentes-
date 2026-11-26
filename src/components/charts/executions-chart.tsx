@@ -35,7 +35,7 @@ export function ExecutionsChart({ data }: { data: Point[] }) {
             <XAxis dataKey="day" tickFormatter={label} tick={{ fill: COLORS.text, fontSize: 11 }} axisLine={false} tickLine={false} minTickGap={16} />
             <YAxis allowDecimals={false} tick={{ fill: COLORS.text, fontSize: 11 }} axisLine={false} tickLine={false} width={44} />
             <Tooltip
-              cursor={{ fill: "rgba(255,255,255,0.04)" }}
+              cursor={{ fill: "var(--nx-surface-2)" }}
               contentStyle={{ background: "var(--nx-surface-2)", border: "1px solid var(--nx-border-strong)", borderRadius: 10, fontSize: 12 }}
               labelStyle={{ color: "var(--nx-ink)", fontWeight: 600 }}
               itemStyle={{ color: "var(--nx-ink-muted)" }}

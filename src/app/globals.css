@@ -4,13 +4,13 @@
 
 /* Variáveis do shadcn apontando para os tokens do NEXUS (nenhuma cor nova aqui). */
 :root {
-  color-scheme: dark;
+  color-scheme: light;
   --radius: var(--nx-radius);
   --background: var(--nx-bg);
   --foreground: var(--nx-ink);
   --card: var(--nx-surface);
   --card-foreground: var(--nx-ink);
-  --popover: var(--nx-surface-2);
+  --popover: var(--nx-surface);
   --popover-foreground: var(--nx-ink);
   --primary: var(--nx-brand);
   --primary-foreground: var(--nx-on-brand);
@@ -27,7 +27,8 @@
 }
 
 @theme inline {
-  --font-sans: var(--font-inter), var(--nx-font-sans);
+  --font-sans: var(--font-barlow), var(--nx-font-sans);
+  --font-display: var(--font-barlow-semi), var(--nx-font-display);
   --font-mono: var(--nx-font-mono);
 
   --color-background: var(--background);
@@ -53,13 +54,17 @@
   --color-bg-alt: var(--nx-bg-alt);
   --color-surface: var(--nx-surface);
   --color-surface-2: var(--nx-surface-2);
+  --color-surface-3: var(--nx-surface-3);
   --color-line: var(--nx-border);
   --color-line-strong: var(--nx-border-strong);
   --color-ink: var(--nx-ink);
+  --color-ink-body: var(--nx-ink-body);
   --color-ink-muted: var(--nx-ink-muted);
   --color-ink-subtle: var(--nx-ink-subtle);
   --color-brand: var(--nx-brand);
   --color-brand-hover: var(--nx-brand-hover);
+  --color-brand-pressed: var(--nx-brand-pressed);
+  --color-on-brand: var(--nx-on-brand);
   --color-electric: var(--nx-electric);
   --color-success: var(--nx-success);
   --color-warning: var(--nx-warning);
@@ -70,11 +75,11 @@
   --color-chart-4: var(--nx-chart-4);
   --color-chart-critical: var(--nx-chart-critical);
 
-  --radius-sm: calc(var(--radius) * 0.5);
-  --radius-md: calc(var(--radius) * 0.75);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.33);
-  --radius-2xl: calc(var(--radius) * 1.66);
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: var(--nx-radius);
+  --radius-xl: var(--nx-radius-card);
+  --radius-2xl: var(--nx-radius-tile);
 
   --tracking-display: var(--nx-tracking-display);
   --tracking-eyebrow: var(--nx-tracking-eyebrow);
@@ -82,13 +87,10 @@
 
 @layer base {
   * { @apply border-border; }
+  h1, h2, h3 { font-family: var(--font-display); }
   html { -webkit-tap-highlight-color: transparent; }
   body {
     @apply bg-background text-foreground antialiased;
-    background-image:
-      radial-gradient(1200px 600px at 100% -10%, color-mix(in oklab, var(--nx-electric) 10%, transparent), transparent 60%),
-      radial-gradient(900px 500px at -10% 110%, color-mix(in oklab, var(--nx-brand) 7%, transparent), transparent 60%);
-    background-attachment: fixed;
   }
   :focus-visible { outline: 2px solid var(--nx-electric); outline-offset: 2px; }
   ::selection { background: var(--nx-electric-soft); }

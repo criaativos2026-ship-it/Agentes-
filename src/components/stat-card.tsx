@@ -24,7 +24,7 @@ export function StatCard({
     warning: "text-warning bg-warning/10",
   }[tone];
   return (
-    <div className="rounded-xl border border-line bg-card/80 p-4 sm:p-5">
+    <div className="rounded-xl border border-line bg-card p-4 sm:p-5">
       <div className="flex items-start justify-between gap-3">
         <p className="text-[13px] font-medium text-ink-muted">{label}</p>
         {Icon && (
@@ -33,8 +33,8 @@ export function StatCard({
           </span>
         )}
       </div>
-      <p className="mt-2 text-2xl font-bold tracking-display text-ink tabular-nums sm:text-[28px]">{value ?? "—"}</p>
-      {hint && <p className="mt-1 text-xs text-ink-subtle">{hint}</p>}
+      <p className="mt-3 font-display text-[32px] leading-none font-normal text-ink tabular-nums sm:text-[40px]">{value ?? "—"}</p>
+      <div className="mt-4 border-t border-line pt-2">{hint ? <p className="text-xs text-ink-subtle">{hint}</p> : <span className="block h-4" aria-hidden />}</div>
     </div>
   );
 }

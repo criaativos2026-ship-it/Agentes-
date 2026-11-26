@@ -1,19 +1,32 @@
 import { cn } from "@/lib/utils";
+import { WORDMARK_AI, WORDMARK_NEXUS, WORDMARK_WIDTH } from "./brand-paths";
 
-/** Marca provisória do NEXUS AI (símbolo geométrico + nome). Substitua quando a marca definitiva existir. */
-export function Logo({ className, compact }: { className?: string; compact?: boolean }) {
+/**
+ * Marca NEXUS AI (ver docs/MANUAL_DE_MARCA.md). Símbolo: um "N" traçado como caminho entre dois
+ * nós; o nó de resultado é o único ponto de cor (azul de sinal). Letras em contorno, sem fonte externa.
+ * `tone="negative"` para fundos escuros.
+ */
+export function Logo({ className, compact, tone = "positive" }: { className?: string; compact?: boolean; tone?: "positive" | "negative" }) {
+  const ink = tone === "negative" ? "#FFFFFF" : "var(--nx-ink)";
+  const s = 52 / 64;
   return (
-    <span className={cn("inline-flex items-center gap-2.5", className)}>
-      <svg viewBox="0 0 32 32" className="size-8 shrink-0" aria-hidden>
-        {/* Cores sólidas: um gradiente com ID fixo quebra quando o logo aparece duas vezes (menu oculto no celular). */}
-        <rect x="1" y="1" width="30" height="30" rx="9" fill="var(--nx-surface-2)" stroke="var(--nx-electric)" strokeWidth="1.5" />
-        <path d="M9 22V10l14 12V10" fill="none" stroke="var(--nx-brand)" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
+    <svg
+      viewBox={`0 0 ${compact ? 56 : WORDMARK_WIDTH} 56`}
+      className={cn("h-7 w-auto shrink-0", className)}
+      role="img"
+      aria-label="NEXUS AI"
+    >
+      <g transform={`translate(0 2) scale(${s})`}>
+        <path d="M19 46V18L45 46V18" fill="none" stroke={ink} strokeWidth="6" strokeMiterlimit="10" />
+        <circle cx="19" cy="46" r="6.5" fill={ink} />
+        <circle cx="45" cy="18" r="6.5" fill="var(--nx-electric)" />
+      </g>
       {!compact && (
-        <span className="text-[17px] font-extrabold tracking-display text-ink">
-          NEXUS<span className="text-brand"> AI</span>
-        </span>
+        <>
+          <path d={WORDMARK_NEXUS} fill={ink} />
+          <path d={WORDMARK_AI} fill={ink} />
+        </>
       )}
-    </span>
+    </svg>
   );
 }

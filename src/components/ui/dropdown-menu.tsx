@@ -14,7 +14,7 @@ function DropdownMenuContent({ className, sideOffset = 8, ...props }: React.Comp
         data-slot="dropdown-menu-content"
         sideOffset={sideOffset}
         className={cn(
-          "z-50 max-h-(--radix-dropdown-menu-content-available-height) min-w-[14rem] overflow-y-auto rounded-xl border border-line-strong bg-popover p-1.5 text-popover-foreground shadow-2xl data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0",
+          "z-50 max-h-(--radix-dropdown-menu-content-available-height) min-w-[14rem] overflow-y-auto rounded-lg border border-line bg-popover p-1.5 text-popover-foreground shadow-[0_8px_24px_rgba(1,2,5,0.12)] data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0",
           className,
         )}
         {...props}

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NEXUS AI — Telas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Semi+Condensed:wght@400;500&display=swap">
+<style>
+/* VOICE everyday: a guided product tour, calm and precise
+   IDEA the product's own showroom — real screens in quiet frames, like a technical spec sheet
+   PICTURE the selected screen, large, inside a browser or phone frame, with its explanation beside it
+   COLOUR NEXUS AI identity: white canvas, ink #010205, greys; blue #1A44EA only for focus/links
+   TYPE Barlow Semi Condensed 400 (display) + Barlow (text), as in the product
+   LAYOUT laptop: screen list left, frame and caption right; phone: title, frame, caption, list below */
+:root{color-scheme:light;--bg:#FFFFFF;--alt:#F2F2F3;--surface:#FFFFFF;--surface2:#E7E7E8;--line:#D8D8DB;--line2:#A8A8AD;--ink:#010205;--body:#393A3D;--muted:#5C5E62;--subtle:#6B6D70;--signal:#1A44EA}
+*{box-sizing:border-box;min-width:0}
+html,body{margin:0}
+body{background:var(--bg);color:var(--body);font:16px/1.55 Barlow,system-ui,-apple-system,"Segoe UI",sans-serif;overflow-x:clip}
+a{color:var(--signal)}
+.wrap{max-width:1360px;margin:0 auto;padding:clamp(20px,3vw,40px) max(4vw,16px) 48px}
+header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:28px;padding-bottom:24px;border-bottom:1px solid var(--line)}
+.brand{display:grid;gap:18px}
+.brand svg{height:30px;width:auto}
+h1{margin:0;font:400 clamp(30px,3.6vw,44px)/1.05 "Barlow Semi Condensed",Barlow,sans-serif;color:var(--ink)}
+.lede{margin:6px 0 0;color:var(--muted);font-size:16px}
+.note{font-size:13px;color:var(--subtle);max-width:440px;margin:0}
+.grid{display:grid;grid-template-columns:280px minmax(0,1fr);gap:24px;align-items:start}
+nav{background:var(--alt);border-radius:16px;padding:10px;position:sticky;top:16px;max-height:calc(100dvh - 32px);overflow:auto}
+nav h2{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--subtle);margin:14px 10px 6px}
+nav h2:first-child{margin-top:4px}
+nav button{display:flex;gap:10px;align-items:center;width:100%;min-height:40px;padding:8px 10px;border:0;border-radius:8px;background:none;color:var(--muted);font:inherit;font-size:15px;text-align:left;cursor:pointer}
+nav button:hover{background:var(--surface2);color:var(--ink)}
+nav button[aria-current=true]{background:var(--ink);color:#fff}
+nav button[aria-current=true] .num{color:#A8A8AD}
+nav button:focus-visible,.ctl:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
+.num{font-variant-numeric:tabular-nums;color:var(--subtle);font-size:12px;width:20px;flex:none}
+.stage{display:grid;gap:16px}
+.frame{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.bar{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--line);background:var(--alt)}
+.dots{display:flex;gap:6px}.dots i{width:10px;height:10px;border-radius:50%;background:var(--line)}
+.url{flex:1;margin-left:8px;padding:5px 12px;border-radius:6px;background:var(--bg);border:1px solid var(--line);color:var(--subtle);font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.shot{display:block;width:100%;height:auto;background:var(--bg)}
+.phone{width:min(360px,100%);margin:0 auto;border-radius:44px;padding:10px;background:var(--ink)}
+.phone .shot{border-radius:34px}
+.caption{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px 24px;align-items:start;border-top:1px solid var(--ink);padding:18px 0 0}
+.caption h3{margin:0 0 6px;font:400 28px/1.1 "Barlow Semi Condensed",Barlow,sans-serif;color:var(--ink)}
+.area{font-size:13px;color:var(--subtle);font-weight:500;margin-bottom:6px}
+.caption p{margin:0;color:var(--body);max-width:70ch}
+.caption ul{margin:12px 0 0;padding:0;list-style:none;color:var(--body);font-size:15px;max-width:70ch}
+.caption li{margin:0;padding:7px 0;border-top:1px solid var(--line)}
+.controls{display:flex;gap:8px;align-items:center}
+.ctl{min-height:44px;padding:0 18px;border-radius:8px;border:1px solid var(--line2);background:var(--bg);color:var(--ink);font:inherit;font-size:15px;font-weight:500;cursor:pointer}
+.ctl:hover{border-color:var(--ink)}
+.ctl.primary{background:var(--ink);border-color:var(--ink);color:#fff}
+.ctl.primary:hover{background:#333}
+.count{font-size:13px;color:var(--subtle);white-space:nowrap;font-variant-numeric:tabular-nums}
+.shot{animation:in .35s ease}
+@keyframes in{from{opacity:0}to{opacity:1}}
+@media(prefers-reduced-motion:reduce){.shot{animation:none}}
+footer{margin-top:28px;color:var(--subtle);font-size:13px}
+@media(max-width:900px){.grid{grid-template-columns:minmax(0,1fr)}nav{position:static;max-height:none;order:2}.stage{order:1}.caption{grid-template-columns:minmax(0,1fr)}.controls{justify-content:space-between}}
+@media(max-width:600px){.url{display:none}.caption h3{font-size:24px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 254 56" width="254" height="56"><path d="M15.44 39.38V16.63L36.56 39.38V16.63" fill="none" stroke="#010205" stroke-width="4.88" stroke-linejoin="miter" stroke-miterlimit="10"/><circle cx="15.44" cy="39.38" r="5.28" fill="#010205"/><circle cx="36.56" cy="16.63" r="5.28" fill="#1A44EA"/><path d="M84.76 16.40Q84.76 16 85.16 16L85.16 16L88.20 16Q88.60 16 88.60 16.40L88.60 16.40L88.60 43.60Q88.60 44 88.20 44L88.20 44L85 44Q84.64 44 84.52 43.72L84.52 43.72L74.88 24.32Q74.80 24.24 74.74 24.24Q74.68 24.24 74.68 24.36L74.68 24.36L74.72 43.60Q74.72 44 74.32 44L74.32 44L71.28 44Q70.88 44 70.88 43.60L70.88 43.60L70.88 16.40Q70.88 16 71.28 16L71.28 16L74.48 16Q74.84 16 74.96 16.28L74.96 16.28L84.56 35.68Q84.64 35.76 84.70 35.76Q84.76 35.76 84.76 35.64L84.76 35.64L84.76 16.40ZM116.76 18.92Q116.76 19.32 116.36 19.32L116.36 19.32L104.76 19.32Q104.60 19.32 104.60 19.48L104.60 19.48L104.60 28.12Q104.60 28.28 104.76 28.28L104.76 28.28L112.40 28.28Q112.80 28.28 112.80 28.68L112.80 28.68L112.80 31.20Q112.80 31.60 112.40 31.60L112.40 31.60L104.76 31.60Q104.60 31.60 104.60 31.76L104.60 31.76L104.60 40.52Q104.60 40.68 104.76 40.68L104.76 40.68L116.36 40.68Q116.76 40.68 116.76 41.08L116.76 41.08L116.76 43.60Q116.76 44 116.36 44L116.36 44L101.16 44Q100.76 44 100.76 43.60L100.76 43.60L100.76 16.40Q100.76 16 101.16 16L101.16 16L116.36 16Q116.76 16 116.76 16.40L116.76 16.40L116.76 18.92ZM126.56 44Q126.36 44 126.28 43.86Q126.20 43.72 126.28 43.52L126.28 43.52L133.20 30.12Q133.28 30 133.20 29.88L133.20 29.88L126.28 16.48Q126.24 16.40 126.24 16.28L126.24 16.28Q126.24 16 126.56 16L126.56 16L129.80 16Q130.16 16 130.28 16.28L130.28 16.28L135.32 26.40Q135.36 26.48 135.44 26.48Q135.52 26.48 135.56 26.40L135.56 26.40L140.52 16.28Q140.64 16 141 16L141 16L144.24 16Q144.44 16 144.52 16.14Q144.60 16.28 144.52 16.48L144.52 16.48L137.60 29.92Q137.56 30.04 137.60 30.16L137.60 30.16L144.52 43.52Q144.56 43.60 144.56 43.72L144.56 43.72Q144.56 44 144.24 44L144.24 44L141.04 44Q140.68 44 140.56 43.72L140.56 43.72L135.56 33.60Q135.52 33.52 135.44 33.52Q135.36 33.52 135.32 33.60L135.32 33.60L130.28 43.72Q130.16 44 129.80 44L129.80 44L126.56 44ZM163.48 44.32Q160.96 44.32 159.02 43.26Q157.08 42.20 156.02 40.26Q154.96 38.32 154.96 35.76L154.96 35.76L154.96 16.40Q154.96 16 155.36 16L155.36 16L158.40 16Q158.80 16 158.80 16.40L158.80 16.40L158.80 36Q158.80 38.24 160.10 39.62Q161.40 41 163.48 41L163.48 41Q165.60 41 166.90 39.62Q168.20 38.24 168.20 36L168.20 36L168.20 16.40Q168.20 16 168.60 16L168.60 16L171.64 16Q172.04 16 172.04 16.40L172.04 16.40L172.04 35.76Q172.04 38.32 170.98 40.26Q169.92 42.20 167.98 43.26Q166.04 44.32 163.48 44.32L163.48 44.32ZM191.32 44.32Q188.76 44.32 186.82 43.38Q184.88 42.44 183.82 40.76Q182.76 39.08 182.76 36.84L182.76 36.84L182.76 35.76Q182.76 35.36 183.16 35.36L183.16 35.36L186.12 35.36Q186.52 35.36 186.52 35.76L186.52 35.76L186.52 36.64Q186.52 38.60 187.86 39.80Q189.20 41 191.48 41L191.48 41Q193.52 41 194.70 39.90Q195.88 38.80 195.88 37L195.88 37Q195.88 35.80 195.28 34.92Q194.68 34.04 193.54 33.28Q192.40 32.52 190.24 31.36L190.24 31.36Q187.80 30.08 186.34 29.08Q184.88 28.08 183.92 26.56Q182.96 25.04 182.96 22.88L182.96 22.88Q182.96 19.52 185.16 17.60Q187.36 15.68 191.00 15.68L191.00 15.68Q193.52 15.68 195.44 16.64Q197.36 17.60 198.42 19.34Q199.48 21.08 199.48 23.36L199.48 23.36L199.48 24.28Q199.48 24.68 199.08 24.68L199.08 24.68L196.08 24.68Q195.68 24.68 195.68 24.28L195.68 24.28L195.68 23.44Q195.68 21.48 194.40 20.24Q193.12 19 190.92 19L190.92 19Q188.96 19 187.86 20Q186.76 21 186.76 22.84L186.76 22.84Q186.76 24.04 187.30 24.88Q187.84 25.72 188.96 26.46Q190.08 27.20 192.28 28.32L192.28 28.32Q195.04 29.88 196.46 30.88Q197.88 31.88 198.78 33.32Q199.68 34.76 199.68 36.80L199.68 36.80Q199.68 40.24 197.42 42.28Q195.16 44.32 191.32 44.32L191.32 44.32Z" fill="#010205"/><path d="M232.24 44Q231.88 44 231.80 43.64L231.80 43.64L230.48 38.64Q230.44 38.52 230.28 38.52L230.28 38.52L220.72 38.52Q220.56 38.52 220.52 38.64L220.52 38.64L219.20 43.64Q219.12 44 218.76 44L218.76 44L216.68 44Q216.48 44 216.38 43.88Q216.28 43.76 216.32 43.56L216.32 43.56L223.80 16.36Q223.88 16 224.24 16L224.24 16L226.80 16Q227.16 16 227.24 16.36L227.24 16.36L234.72 43.56L234.76 43.68Q234.76 44 234.36 44L234.36 44L232.24 44ZM221.20 36.04Q221.16 36.08 221.22 36.14Q221.28 36.20 221.36 36.20L221.36 36.20L229.64 36.20Q229.72 36.20 229.78 36.14Q229.84 36.08 229.80 36.04L229.80 36.04L225.56 19.96Q225.52 19.88 225.48 19.88Q225.44 19.88 225.40 19.96L225.40 19.96L221.20 36.04ZM245.80 44Q245.40 44 245.40 43.60L245.40 43.60L245.40 16.40Q245.40 16 245.80 16L245.80 16L247.84 16Q248.24 16 248.24 16.40L248.24 16.40L248.24 43.60Q248.24 44 247.84 44L247.84 44L245.80 44Z" fill="#010205"/></svg>
+      <div>
+        <h1>Telas do sistema</h1>
+        <p class="lede">Tour pelas telas reais da plataforma de agentes de IA.</p>
+      </div>
+    </div>
+    <p class="note">Somente visualização. Os dados são fictícios, dos testes automatizados; as respostas “Recebi: …” vêm do simulador de IA usado nos testes, não de um modelo real.</p>
+  </header>
+
+  <div class="grid">
+    <nav id="list" aria-label="Telas"></nav>
+    <section class="stage" aria-live="polite">
+      <div id="frame"></div>
+      <div class="caption">
+        <div>
+          <div class="area" id="area"></div>
+          <h3 id="title"></h3>
+          <p id="desc"></p>
+          <ul id="points"></ul>
+        </div>
+        <div class="controls">
+          <button class="ctl" id="prev" type="button" aria-label="Tela anterior">← Anterior</button>
+          <span class="count" id="count"></span>
+          <button class="ctl primary" id="next" type="button" aria-label="Próxima tela">Próxima →</button>
+        </div>
+      </div>
+    </section>
+  </div>
+  <footer>Use as setas ← → do teclado para navegar. Cada tela tem endereço próprio para compartilhar.</footer>
+</div>
+
+<script>
+{
+const G = { a: "Super administrador", c: "Empresa cliente", m: "Celular" };
+const S = [
+  ["a00-login", "/entrar", "Entrar", "Login próprio da plataforma. Sem cadastro aberto: o super administrador e os gestores criam as contas.", ["Limite de tentativas guardado no banco", "Recuperação de senha por link de uso único", "Primeiro acesso protegido por código secreto em produção"]],
+  ["a01-dashboard", "/admin", "Dashboard do super administrador", "Visão geral da plataforma, calculada em tempo real a partir do banco de dados.", ["Empresas, agentes publicados, execuções e erros (30 dias)", "Consumo de IA em tokens e custo estimado", "Receita recorrente mensal e assinaturas ativas", "Gráfico de execuções por dia e atividades recentes"]],
+  ["a02-empresas", "/admin/empresas", "Empresas clientes", "Cada empresa tem um ambiente privado e isolado no próprio banco de dados.", ["Status, assinatura, número de usuários e agentes", "Busca por nome ou segmento", "Cadastro com o primeiro administrador da empresa"]],
+  ["a03-empresa", "/admin/empresas/…", "Detalhe da empresa", "Equipe, dados, agentes e histórico de uma empresa.", ["Alterar papéis, desativar acessos e gerar link de senha", "Domínios liberados para APIs externas", "Suspender ou ativar a empresa", "Abrir o painel do cliente como suporte"]],
+  ["a04-projeto", "/admin/projetos/…", "Projeto personalizado", "Do levantamento das necessidades à publicação dos agentes no painel do cliente.", ["Segmento, objetivos, necessidades e processos a automatizar", "Checklist do fluxo de implantação calculado com dados reais", "9 status com histórico de alterações e anotações"]],
+  ["a05-agentes", "/admin/agentes", "Construtor de agentes", "Todos os agentes de todas as empresas, com filtros por empresa e status.", ["Criação a partir de 9 modelos ou do zero", "Cada agente pertence a uma empresa"]],
+  ["a06-construtor-inteligencia", "/admin/agentes/… · Inteligência", "Construtor — Inteligência", "Configuração independente de fornecedor de IA.", ["Provedor e modelo (Claude, OpenAI ou compatíveis)", "Prompt de sistema, instruções, personalidade, idioma e limites de atuação", "Esforço de raciocínio, tamanho da resposta, máximo de passos, tempo e tokens"]],
+  ["a07-construtor-ferramentas", "/admin/agentes/… · Ferramentas", "Construtor — Ferramentas", "21 ferramentas padronizadas, com validação de parâmetros, permissão e registro em log.", ["Risco de cada ferramenta e política de aprovação humana", "Ferramentas de risco alto sempre pedem aprovação", "Pendências mostradas com honestidade (sem simular)"]],
+  ["a08-construtor-testar", "/admin/agentes/… · Testar", "Construtor — Área de testes", "Conversa com o rascunho do agente antes de liberar ao cliente.", ["Passos e ferramentas aparecem ao vivo", "Não consome a cota do plano do cliente", "Link direto para execuções e erros"]],
+  ["a09-construtor-versoes", "/admin/agentes/… · Versões", "Construtor — Versões", "Cada publicação trava uma versão imutável.", ["Rascunho e versão publicada separados", "Restaurar uma versão anterior com um clique"]],
+  ["a10-monitoramento", "/admin/execucoes", "Monitoramento", "Todas as execuções dos agentes, de todas as empresas.", ["Filtros por empresa, status e testes", "Erros e quem disparou cada execução"]],
+  ["a11-execucao", "/admin/execucoes/…", "Detalhe de uma execução", "Linha do tempo passo a passo do que o agente fez.", ["Raciocínio, ferramentas, aprovações e erros", "Tempo, tentativas, tokens e custo estimado", "Cancelar execuções em andamento"]],
+  ["a12-consumo", "/admin/consumo", "Consumo de IA", "Tokens, execuções e custo estimado por empresa e por modelo, mês a mês.", ["Testes do construtor separados do uso real"]],
+  ["a13-integracoes", "/admin/integracoes", "Controle de integrações", "Integrações de todas as empresas, com status e uso.", ["WhatsApp, Google, Maps, HubSpot, API REST e webhook", "Nada aparece como conectado sem teste real"]],
+  ["a14-planos", "/admin/planos", "Planos", "Planos e contratos configuráveis.", ["Preço, ciclo, validade e recursos", "Limites de agentes, usuários, execuções e tokens aplicados automaticamente"]],
+  ["a15-financeiro", "/admin/financeiro", "Assinaturas e pagamentos", "Receita, cobranças, vencimentos e inadimplência.", ["MRR, recebido no mês, a receber e vencido", "Baixa manual (PIX, boleto) e cobranças avulsas", "Suspensão automática por atraso; Stripe e Mercado Pago desligados até liberar"]],
+  ["a16-suporte", "/admin/suporte", "Central de suporte", "Chamados abertos pelas empresas.", ["Respostas e notas internas que o cliente não vê", "Status e prioridade"]],
+  ["a17-auditoria", "/admin/auditoria", "Logs de atividades", "Registro de auditoria: quem fez o quê, quando e de onde.", ["Filtros por empresa e tipo de ação"]],
+  ["a18-configuracoes", "/admin/configuracoes", "Configurações", "Chaves dos provedores de IA e situação de cada serviço externo.", ["Chave salva criptografada e testada na hora", "Serviços pendentes indicados claramente"]],
+  ["c01-painel", "/app/imobiliaria-horizonte", "Painel da empresa", "O que o administrador da empresa vê ao entrar.", ["Agentes contratados e ativos", "Tarefas executadas, taxa de sucesso e consumo do mês", "Atividades recentes"]],
+  ["c02-agentes", "/app/…/agentes", "Meus agentes", "Agentes publicados e liberados para a pessoa (por papel).", []],
+  ["c03-chat", "/app/…/agentes/…", "Conversa com o agente", "O agente responde e executa tarefas com as ferramentas liberadas.", ["Aqui ele registrou uma oportunidade no CRM depois da aprovação humana", "Histórico de conversas ao lado"]],
+  ["c04-historico", "/app/…/execucoes", "Histórico de atividades", "Execuções dos agentes: todas (gestor) ou só as próprias (usuário).", []],
+  ["c05-aprovacoes", "/app/…/aprovacoes", "Aprovações", "Ações sensíveis dos agentes só acontecem depois da aprovação.", ["Mostra exatamente o que será feito", "Aprovar ou recusar com motivo"]],
+  ["c06-conhecimento", "/app/…/conhecimento", "Base de conhecimento", "Documentos que os agentes podem consultar, isolados por empresa.", ["PDF, Word, TXT, CSV, Excel, textos e perguntas e respostas", "Teste da busca na própria tela"]],
+  ["c07-integracoes", "/app/…/integracoes", "Central de integrações", "Conexões da empresa com serviços externos.", ["Credenciais criptografadas", "Teste real de comunicação e registro de uso"]],
+  ["c08-automacao", "/app/…/automacoes/…", "Automação", "Fluxos que encadeiam agentes, condições e aprovações.", ["Gatilho manual, por webhook ou agenda", "Etapas com desvios (formato pronto para um construtor visual)"]],
+  ["c09-equipe", "/app/…/equipe", "Equipe e permissões", "Pessoas da empresa e papéis personalizados.", ["23 permissões configuráveis", "A empresa nunca fica sem administrador"]],
+  ["c10-assinatura", "/app/…/assinatura", "Plano e consumo", "Limites do plano, consumo do mês e pagamentos.", []],
+  ["c11-tarefas", "/app/…/tarefas", "Tarefas", "Pendências criadas pela equipe e pelos agentes.", []],
+  ["c12-conta", "/conta", "Minha conta", "Perfil, senha, sessões ativas e direitos de privacidade (LGPD).", ["Encerrar sessões em outros dispositivos", "Baixar meus dados e pedir exclusão"]],
+  ["m01-painel", "Celular", "Painel no celular", "Todo o sistema funciona no celular.", []],
+  ["m02-menu", "Celular", "Menu no celular", "Navegação em gaveta lateral.", []],
+  ["m03-chat", "Celular", "Conversa no celular", "Chat com o agente, com as ferramentas usadas em cada resposta.", []],
+  ["m04-conhecimento", "Celular", "Base de conhecimento no celular", "Envio de documentos e busca também pelo celular.", []]
+].map(([id, url, title, desc, points]) => ({ id, url, title, desc, points, g: id[0] }));
+
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+const list = document.getElementById("list");
+const frame = document.getElementById("frame");
+let i = 0;
+
+list.innerHTML = Object.keys(G).map((g) =>
+  `<h2>${G[g]}</h2>` + S.map((s, n) => s.g === g ? `<button type="button" data-n="${n}"><span class="num">${n + 1}</span>${esc(s.title)}</button>` : "").join("")
+).join("");
+
+function show(n, push = true) {
+  i = (n + S.length) % S.length;
+  const s = S[i];
+  const img = `<img class="shot" src="telas/${s.id}.jpg" alt="Tela: ${esc(s.title)}" loading="eager">`;
+  frame.innerHTML = s.g === "m"
+    ? `<div class="phone">${img}</div>`
+    : `<div class="frame"><div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="url">nexus-ai-agentes.netlify.app${esc(s.url)}</span></div>${img}</div>`;
+  document.getElementById("area").textContent = G[s.g];
+  document.getElementById("title").textContent = s.title;
+  document.getElementById("desc").textContent = s.desc;
+  document.getElementById("points").innerHTML = s.points.map((p) => `<li>${esc(p)}</li>`).join("");
+  document.getElementById("count").textContent = `${i + 1} de ${S.length}`;
+  list.querySelectorAll("button").forEach((b) => b.setAttribute("aria-current", String(Number(b.dataset.n) === i)));
+  const cur = list.querySelector(`button[data-n="${i}"]`);
+  if (cur && window.innerWidth > 900) cur.scrollIntoView({ block: "nearest" });
+  if (push && location.hash !== `#${s.id}`) history.replaceState(null, "", `#${s.id}`);
+  const nxt = new Image(); nxt.src = `telas/${S[(i + 1) % S.length].id}.jpg`;
+}
+
+list.addEventListener("click", (e) => {
+  const b = e.target.closest("button[data-n]");
+  if (!b) return;
+  show(Number(b.dataset.n));
+  if (window.innerWidth <= 900) frame.scrollIntoView({ behavior: "smooth", block: "start" });
+});
+document.getElementById("prev").addEventListener("click", () => show(i - 1));
+document.getElementById("next").addEventListener("click", () => show(i + 1));
+document.addEventListener("keydown", (e) => {
+  if (e.target.closest("input,textarea")) return;
+  if (e.key === "ArrowRight") show(i + 1);
+  if (e.key === "ArrowLeft") show(i - 1);
+});
+const fromHash = () => { const n = S.findIndex((s) => `#${s.id}` === location.hash); show(n >= 0 ? n : 0, false); };
+window.addEventListener("hashchange", fromHash);
+fromHash();
+}
+</script>
+</body>
+</html>
