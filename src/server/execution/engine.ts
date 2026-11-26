@@ -42,6 +42,12 @@ type LoopState = {
   finalText?: string;
 };
 
+/** Pausa cooperativa: o tempo da fatia acabou; a execução volta para a fila e continua depois. */
+class SliceYield extends Error {}
+
+/** Janela de tempo de UMA chamada (ambientes serverless têm limite por requisição). */
+export type SliceOptions = { sliceEndsAt?: number; hardStopAt?: number };
+
 class ExecutionFailure extends Error {
   constructor(message: string, readonly retryable = false) {
     super(message);
@@ -89,7 +95,7 @@ async function conversationHistory(tx: Tx, exec: Execution, limit = 20) {
     .filter((m) => m.text);
 }
 
-export async function processExecution(exec: Execution, workerId: string): Promise<void> {
+export async function processExecution(exec: Execution, workerId: string, slice: SliceOptions = {}): Promise<void> {
   if (exec.kind === "workflow") {
     const { processWorkflowExecution } = await import("@/server/workflows/runner");
     await processWorkflowExecution(exec);
@@ -107,6 +113,9 @@ export async function processExecution(exec: Execution, workerId: string): Promi
   const period = periodOf(new Date(), org.timezone);
   const limits = version.limits;
   const deadline = exec.timeoutAt ? exec.timeoutAt.getTime() : Date.now() + state.timeoutSeconds * 1000;
+  // Limite efetivo de cada operação: o menor entre o prazo da execução e o fim da chamada atual.
+  const hardStop = Math.min(deadline, (slice.hardStopAt ?? Infinity) - 3000);
+  let turnsThisSlice = 0;
 
   const db = <T,>(fn: (tx: Tx) => Promise<T>) => withOrg(orgId, exec.triggeredBy, fn);
 
@@ -250,7 +259,7 @@ export async function processExecution(exec: Execution, workerId: string): Promi
         }
         // Execução da ferramenta
         const controller = new AbortController();
-        const timer = setTimeout(() => controller.abort(), Math.min(def.timeoutMs ?? 30000, Math.max(1000, deadline - Date.now())));
+        const timer = setTimeout(() => controller.abort(), Math.min(def.timeoutMs ?? 30000, Math.max(1000, hardStop - Date.now())));
         try {
           const result = await def.execute({ ...toolCtxBase, config: entry.row.config, signal: controller.signal }, parsed.data);
           pending.results[call.id] = { id: call.id, name: call.name, content: result.content, isError: result.isError };
@@ -289,9 +298,16 @@ export async function processExecution(exec: Execution, workerId: string): Promi
       if ((state.turns ?? 0) >= limits.maxSteps) throw new ExecutionFailure(`Limite de ${limits.maxSteps} passos atingido sem concluir a tarefa.`);
       if ((state.tokens ?? 0) >= limits.maxTokensPerRun) throw new ExecutionFailure(`Limite de ${limits.maxTokensPerRun} tokens por execução atingido.`);
 
+      // Fatia de tempo esgotada (serverless): salva e devolve à fila antes de começar outra rodada.
+      if (slice.sliceEndsAt && turnsThisSlice > 0 && Date.now() > slice.sliceEndsAt) throw new SliceYield();
+      if (slice.hardStopAt && hardStop - Date.now() < 10_000) throw new SliceYield();
+
       const startedAt = new Date();
-      const signal = AbortSignal.timeout(Math.max(1000, deadline - Date.now()));
-      const turn = await provider.createTurn({
+      const callBudget = hardStop - Date.now();
+      const signal = AbortSignal.timeout(Math.max(1000, callBudget));
+      let turn;
+      try {
+        turn = await provider.createTurn({
         model: version.model,
         system,
         tools: toolSpecs,
@@ -299,6 +315,12 @@ export async function processExecution(exec: Execution, workerId: string): Promi
         params: { maxTokens: version.params.maxTokens ?? 16000, effort: version.params.effort, temperature: version.params.temperature },
         signal,
       });
+      } catch (err) {
+        // Interrompida pelo fim da fatia (e não pelo prazo da execução): repete a rodada na próxima chamada.
+        if (signal.aborted && slice.hardStopAt && Date.now() < deadline - 1000) throw new SliceYield();
+        throw err;
+      }
+      turnsThisSlice++;
       state.turns = (state.turns ?? 0) + 1;
       state.tokens = (state.tokens ?? 0) + turn.usage.inputTokens + turn.usage.outputTokens;
       state.transcript!.push(turn.assistantMessage);
@@ -325,6 +347,14 @@ export async function processExecution(exec: Execution, workerId: string): Promi
       if (!(await runPendingCalls())) return;
     }
   } catch (err) {
+    if (err instanceof SliceYield) {
+      // Não conta como tentativa: só faltou tempo nesta chamada.
+      const { sql: rawSql } = await import("drizzle-orm");
+      await db((tx) =>
+        tx.update(executions).set({ status: "queued", runAfter: new Date(), lockedAt: null, lockedBy: null, attempts: rawSql`greatest(${executions.attempts} - 1, 0)`, state: state as Record<string, unknown> }).where(eq(executions.id, exec.id)),
+      );
+      return;
+    }
     if (err instanceof ProviderError || err instanceof ExecutionFailure) {
       const retryable = err instanceof ProviderError ? err.retryable : err.retryable;
       if (retryable && exec.attempts < exec.maxAttempts && Date.now() < deadline) {

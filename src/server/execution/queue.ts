@@ -5,7 +5,7 @@ import { withPlatform } from "@/server/db/client";
 import { executions, type Execution } from "@/server/db/schema";
 
 /** Concessão de uma execução a um worker; renovada a cada passo (heartbeat). */
-export const LEASE_MS = 5 * 60 * 1000;
+export const LEASE_MS = Number(process.env.WORKER_LEASE_MS) || 5 * 60 * 1000;
 
 export type EnqueueInput = {
   organizationId: string;

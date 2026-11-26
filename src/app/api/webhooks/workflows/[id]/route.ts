@@ -4,7 +4,7 @@ import { eq } from "drizzle-orm";
 import { withOrg, withPlatform } from "@/server/db/client";
 import { workflows } from "@/server/db/schema";
 import { startWorkflowRun } from "@/server/workflows/service";
-import { drainQueue } from "@/server/execution/worker";
+import { drainQueue, sliceConfig } from "@/server/execution/worker";
 import { hitRateLimit } from "@/server/auth/rate-limit";
 import { safeEqual, sha256 } from "@/server/security/crypto";
 import { uuidSchema } from "@/lib/validation";
@@ -33,6 +33,6 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   }
   const key = req.headers.get("idempotency-key")?.slice(0, 100);
   const res = await withOrg(wf.organizationId, null, (tx) => startWorkflowRun(tx, wf, { text, triggeredBy: null, source: "webhook", idempotencyKey: key ? `hook:${wf.id}:${key}` : undefined }));
-  after(() => drainQueue({ budgetMs: 280_000 }).catch(() => undefined));
+  after(() => drainQueue({ ...sliceConfig(280_000) }).catch(() => undefined));
   return NextResponse.json({ runId: res.runId, executionId: res.executionId, duplicate: res.duplicate }, { status: res.duplicate ? 200 : 202 });
 }

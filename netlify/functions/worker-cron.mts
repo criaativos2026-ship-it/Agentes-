@@ -5,9 +5,15 @@
  * (Alternativa: rodar `npm run worker` num servidor/contêiner dedicado.)
  */
 const workerCron = async () => {
-  const url = `${(process.env.APP_URL ?? "").replace(/\/$/, "")}/api/cron/worker`;
-  const res = await fetch(url, { method: "POST", headers: { Authorization: `Bearer ${process.env.CRON_SECRET}` } });
-  console.log(`[worker-cron] ${res.status} ${await res.text()}`);
+  const base = (process.env.APP_URL || process.env.URL || "").replace(/\/$/, "");
+  const url = `${base}/api/cron/worker`;
+  // Funções agendadas têm 30 s; a rota continua processando no servidor mesmo se esta espera terminar antes.
+  try {
+    const res = await fetch(url, { method: "POST", headers: { Authorization: `Bearer ${process.env.CRON_SECRET}` }, signal: AbortSignal.timeout(25_000) });
+    console.log(`[worker-cron] ${res.status} ${await res.text()}`);
+  } catch (err) {
+    console.log(`[worker-cron] chamada enviada (${err instanceof Error ? err.name : "erro"})`);
+  }
 };
 
 export default workerCron;

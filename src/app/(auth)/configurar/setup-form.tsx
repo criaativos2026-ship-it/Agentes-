@@ -7,10 +7,11 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { SubmitButton } from "@/components/ui/submit-button";
 
-export function SetupForm() {
+export function SetupForm({ code }: { code: string }) {
   const [state, action] = useActionState(setupFirstAdmin, undefined);
   return (
     <form action={action} className="grid gap-4">
+      <input type="hidden" name="code" value={code} />
       <FormError state={state} />
       <Field label="Seu nome" htmlFor="name">
         <Input id="name" name="name" autoComplete="name" required defaultValue={state?.fields?.name} key={`n${state?.fields?.name}`} />

@@ -18,7 +18,7 @@ import {
   setDraftTools,
 } from "@/server/agents/service";
 import { sendChatMessage } from "@/server/execution/control";
-import { drainQueue } from "@/server/execution/worker";
+import { drainQueue, sliceConfig } from "@/server/execution/worker";
 import { checkAgentSlot } from "@/server/billing/limits";
 import { audit } from "@/server/audit/log";
 import { hitRateLimit } from "@/server/auth/rate-limit";
@@ -250,7 +250,7 @@ export async function sendTestMessageAction(input: { agentId: string; conversati
       const draft = await ensureEditableDraft(tx, user.id, input.agentId);
       return sendChatMessage(tx, { orgId, userId: user.id, agentId: input.agentId, version: draft, conversationId: input.conversationId, text, isTest: true, clientRequestId: input.clientRequestId });
     });
-    after(() => drainQueue({ budgetMs: 280_000, onlyId: res.executionId }).catch((e) => console.error("[after] falha ao processar", e)));
+    after(() => drainQueue({ ...sliceConfig(280_000), onlyId: res.executionId }).catch((e) => console.error("[after] falha ao processar", e)));
     return { ok: true as const, ...res };
   } catch (err) {
     return { ok: false as const, ...toErrorState(err) };

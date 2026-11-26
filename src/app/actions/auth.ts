@@ -14,6 +14,7 @@ import { createPasswordResetLink, resetPasswordWithToken } from "@/server/auth/p
 import { sendEmail, isEmailConfigured } from "@/server/email";
 import { audit } from "@/server/audit/log";
 import { emailSchema, nameSchema, passwordSchema } from "@/lib/validation";
+import { setupTokenValid } from "@/server/auth/setup";
 import { PRIVACY_VERSION } from "@/lib/privacy";
 import type { FormState } from "@/lib/form-state";
 
@@ -89,6 +90,7 @@ const setupSchema = z
   .refine((d) => d.password === d.confirm, { message: "As senhas não conferem.", path: ["confirm"] });
 
 export async function setupFirstAdmin(_: FormState, form: FormData): Promise<FormState> {
+  if (!setupTokenValid(String(form.get("code") ?? ""))) return { error: "Código de primeiro acesso inválido." };
   const parsed = setupSchema.safeParse(Object.fromEntries(form));
   if (!parsed.success) return { error: parsed.error.issues[0].message, fields: { email: String(form.get("email") ?? ""), name: String(form.get("name") ?? "") } };
   if (form.get("privacy") !== "on") return { error: "É preciso aceitar o aviso de privacidade.", fields: { email: parsed.data.email, name: parsed.data.name } };

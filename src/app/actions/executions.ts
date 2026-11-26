@@ -8,7 +8,7 @@ import { withOrg } from "@/server/db/client";
 import { agents, agentVersions, approvals, executions } from "@/server/db/schema";
 import { assertOrgPermission, can, getOrgContext } from "@/server/auth/guards";
 import { cancelExecution, decideApproval, sendChatMessage } from "@/server/execution/control";
-import { drainQueue } from "@/server/execution/worker";
+import { drainQueue, sliceConfig } from "@/server/execution/worker";
 import { canUseAgent } from "@/server/services/agent-access";
 import { toErrorState, UserFacingError } from "@/server/actions/result";
 import { hitRateLimit } from "@/server/auth/rate-limit";
@@ -16,7 +16,7 @@ import { AccessDeniedError } from "@/server/errors";
 import { uuidSchema } from "@/lib/validation";
 import type { FormState } from "@/lib/form-state";
 
-const kick = (executionId: string) => after(() => drainQueue({ budgetMs: 280_000, onlyId: executionId }).catch((e) => console.error("[after] falha ao processar", e)));
+const kick = (executionId: string) => after(() => drainQueue({ ...sliceConfig(280_000), onlyId: executionId }).catch((e) => console.error("[after] falha ao processar", e)));
 
 /** Cliente conversando com um agente PUBLICADO que ele tem permissão de usar. */
 export async function sendAgentMessageAction(input: { slug: string; agentId: string; conversationId?: string; text: string; clientRequestId: string }) {

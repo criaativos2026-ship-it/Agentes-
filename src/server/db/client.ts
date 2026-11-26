@@ -12,7 +12,8 @@ const g = globalThis as unknown as { __nexusPg?: ReturnType<typeof postgres>; __
 /** Conexão preguiçosa: o build não depende do banco. Compatível com pooler (prepare: false). */
 function getDb(): Db {
   if (g.__nexusDb) return g.__nexusDb;
-  const url = process.env.DATABASE_URL;
+  // DATABASE_URL (Supabase/PostgreSQL próprio) ou NETLIFY_DB_URL (Netlify Database, preenchida automaticamente).
+  const url = process.env.DATABASE_URL ?? process.env.NETLIFY_DB_URL;
   if (!url) throw new Error("DATABASE_URL não configurada.");
   const client = postgres(url, {
     max: Number(process.env.DATABASE_POOL_MAX ?? 10),
@@ -40,6 +41,9 @@ export async function runScoped<T>(ctx: Scope, fn: (tx: Tx) => Promise<T>): Prom
   return db.transaction(async (tx) => {
     const orgId = ctx.scope === "org" ? ctx.orgId : "";
     const userId = ctx.userId ?? "";
+    // Sempre como "nexus_app" (sem BYPASSRLS e sem ser dono das tabelas): o RLS vale mesmo quando a
+    // conexão é a do dono do banco (caso do Netlify Database, que fornece uma única credencial).
+    await tx.execute(sql`set local role nexus_app`);
     await tx.execute(
       sql`select set_config('app.scope', ${ctx.scope}, true), set_config('app.org_id', ${orgId}, true), set_config('app.user_id', ${userId}, true)`,
     );

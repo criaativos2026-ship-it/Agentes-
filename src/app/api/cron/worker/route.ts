@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { drainQueue, maintenance } from "@/server/execution/worker";
+import { drainQueue, maintenance, sliceConfig } from "@/server/execution/worker";
 import { safeEqual } from "@/server/security/crypto";
 
 export const maxDuration = 300;
@@ -13,6 +13,6 @@ export async function POST(req: Request) {
   const auth = req.headers.get("authorization") ?? "";
   if (!secret || secret.length < 16 || !safeEqual(auth, `Bearer ${secret}`)) return NextResponse.json({ error: "Não autorizado." }, { status: 401 });
   const stale = await maintenance();
-  const processed = await drainQueue({ budgetMs: 240_000 });
+  const processed = await drainQueue({ ...sliceConfig(240_000) });
   return NextResponse.json({ processed, ...stale });
 }

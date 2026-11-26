@@ -57,3 +57,13 @@ describe("slugify", () => {
     expect(slugify("!!!")).toBe("empresa");
   });
 });
+
+describe("migrações da Netlify", () => {
+  it("netlify/database/migrations é cópia exata de drizzle/", async () => {
+    const { readdirSync, readFileSync } = await import("node:fs");
+    const src = readdirSync("drizzle").filter((f) => f.endsWith(".sql")).sort();
+    const dst = readdirSync("netlify/database/migrations").filter((f) => f.endsWith(".sql")).sort();
+    expect(dst).toEqual(src);
+    for (const f of src) expect(readFileSync(`netlify/database/migrations/${f}`, "utf8")).toBe(readFileSync(`drizzle/${f}`, "utf8"));
+  });
+});

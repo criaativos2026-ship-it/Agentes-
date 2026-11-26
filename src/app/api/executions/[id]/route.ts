@@ -1,4 +1,5 @@
-import { NextResponse } from "next/server";
+import { after, NextResponse } from "next/server";
+import { drainQueue, sliceConfig } from "@/server/execution/worker";
 import { getOrgContext, getSession, isPlatformUser, can } from "@/server/auth/guards";
 import { executionOwner, getExecutionDetail } from "@/server/queries/executions";
 import { uuidSchema } from "@/lib/validation";
@@ -19,6 +20,10 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
   }
   const d = await getExecutionDetail(owner.orgId, id);
   if (!d) return NextResponse.json({ error: "Não encontrado." }, { status: 404 });
+  // Em hospedagem serverless a execução é fatiada: quem acompanha ajuda a continuar a próxima fatia.
+  if (d.exec.status === "queued" && d.exec.runAfter.getTime() <= Date.now()) {
+    after(() => drainQueue({ ...sliceConfig(280_000), onlyId: id }).catch((e) => console.error("[polling] falha ao processar", e)));
+  }
   return NextResponse.json(
     {
       id: d.exec.id,

@@ -9,7 +9,7 @@ import { workflows } from "@/server/db/schema";
 import { assertOrgPermission } from "@/server/auth/guards";
 import { definitionSchema } from "@/server/workflows/definition";
 import { startWorkflowRun } from "@/server/workflows/service";
-import { drainQueue } from "@/server/execution/worker";
+import { drainQueue, sliceConfig } from "@/server/execution/worker";
 import { randomToken, sha256 } from "@/server/security/crypto";
 import { audit } from "@/server/audit/log";
 import { toErrorState, UserFacingError } from "@/server/actions/result";
@@ -88,7 +88,7 @@ export async function runWorkflowNowAction(slug: string, id: string, text: strin
       if (!w) throw new UserFacingError("Automação não encontrada.");
       return startWorkflowRun(tx, w, { text: input, triggeredBy: ctx.user.id, source: "manual" });
     });
-    after(() => drainQueue({ budgetMs: 280_000 }).catch(() => undefined));
+    after(() => drainQueue({ ...sliceConfig(280_000) }).catch(() => undefined));
     revalidatePath(`/app/${ctx.org.slug}/automacoes`);
     return { ok: "Automação disparada.", id: res.executionId };
   } catch (err) {
