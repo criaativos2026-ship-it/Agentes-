@@ -1,5 +1,27 @@
 # Publicação (produção)
 
+## Caminho atual: Netlify + Netlify Database (projeto `nexus-ai-agentes`)
+
+Já configurado: projeto criado, login da equipe Netlify desligado para visitantes, variáveis
+`ENCRYPTION_KEY`, `CRON_SECRET`, `SETUP_TOKEN` (produção), `APP_URL`, `WORKER_BUDGET_MS`,
+`WORKER_HARD_LIMIT_MS`, `WORKER_LEASE_MS`. O banco é criado pela Netlify (pacote `@netlify/database`)
+e as migrações de `netlify/database/migrations` são aplicadas antes de cada publicação. A aplicação
+usa `NETLIFY_DB_URL` e assume o papel `nexus_app` em toda transação (RLS ativo).
+
+Para publicar: Netlify → projeto **nexus-ai-agentes** → **Project configuration → Build & deploy →
+Continuous deployment → Link repository** → GitHub → `criaativos2026-ship-it/Agentes-` → branch de
+produção `ccr-171475ad-48d1cm` (ou `main`, depois de juntar o código) → **Deploy**. Cada push publica sozinho.
+
+Primeiro acesso: `https://nexus-ai-agentes.netlify.app/configurar?codigo=<SETUP_TOKEN>` (o valor está
+nas variáveis de ambiente do projeto). Sem o código a tela não cria contas.
+
+Limite da Netlify: 60 s por requisição. As execuções dos agentes são fatiadas (o estado é salvo e
+a tarefa continua na chamada seguinte); para tarefas muito longas, prefira o worker dedicado.
+
+---
+
+## Alternativa: Supabase + Netlify/Vercel
+
 Arquitetura recomendada: **Supabase** (PostgreSQL + pgvector) · **Netlify** (app Next.js) · fila processada por **função agendada** (incluída) ou **worker dedicado**.
 
 ## 1. Banco no Supabase
